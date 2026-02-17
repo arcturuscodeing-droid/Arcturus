@@ -246,15 +246,6 @@
                                   class="bg-purple-600 text-white text-xs flex items-center justify-center rounded-full w-6 h-6" 
                                   x-text="watchLaterCount"></span>
                         </button>
-                        <a href="https://github.com/ambr0sial/nova" target="_blank" class="nav-link flex items-center">
-                            <span>GitHub</span>
-                        </a>
-                        <a href="https://ko-fi.com/ambrosial" target="_blank" class="nav-link flex items-center">
-                            <span>Ko-Fi</span>
-                </a>
-                        <a href="https://discord.gg/s9kUZw7CqP" target="_blank" class="nav-link flex items-center">
-                            <span>Discord</span>
-                        </a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -291,12 +282,7 @@
                               class="bg-purple-600 text-white text-xs flex items-center justify-center rounded-full w-6 h-6" 
                               x-text="watchLaterCount"></span>
                     </button>
-                    <a href="https://github.com/ambr0sial/nova" target="_blank" 
-                       class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">GitHub</a>
-                    <a href="https://ko-fi.com/ambrosial" target="_blank" 
-                       class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Ko-Fi</a>
-                    <a href="https://discord.gg/s9kUZw7CqP" target="_blank" 
-                       class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Discord</a>
+
                 </div>
             </div>
         </div>
@@ -1261,6 +1247,16 @@
                         this.selectedSource = sourceParam;
                     }
 
+                    // Get season/episode from URL if provided (from continue watching)
+                    const seasonParam = urlParams.get('season');
+                    const episodeParam = urlParams.get('episode');
+                    if (this.isShow && seasonParam) {
+                        this.selectedSeason = parseInt(seasonParam);
+                    }
+                    if (this.isShow && episodeParam) {
+                        this.selectedEpisode = parseInt(episodeParam);
+                    }
+
                     if (this.contentId && this.contentType) {
                         await this.fetchContent();
                         this.updateVideoUrl();
@@ -1611,7 +1607,17 @@
                         const data = await response.json();
                         this.seasonData = data;
                         this.episodes = Array.from({length: data.episodes.length}, (_, i) => i + 1);
-                        this.selectedEpisode = 1;
+                        
+                        // Only reset to episode 1 if not resuming from continue watching
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const episodeParam = urlParams.get('episode');
+                        const seasonParam = urlParams.get('season');
+                        if (episodeParam && seasonParam && parseInt(seasonParam) === this.selectedSeason) {
+                            this.selectedEpisode = parseInt(episodeParam); // Resume at saved episode
+                        } else {
+                            this.selectedEpisode = 1; // Default to episode 1
+                        }
+                        
                         this.updateVideoUrl();
                     } catch (error) {
                         console.error('Error fetching episodes:', error);
@@ -1945,15 +1951,31 @@
                         id: this.contentId,
                         type: this.contentType,
                         title: this.content.title || this.content.name,
+                        season: this.selectedSeason,
+                        episode: this.selectedEpisode,
                         source: this.selectedSource
                     });
                     
                     // Get existing continue watching
                     const continueWatching = JSON.parse(localStorage.getItem('continueWatching') || '[]');
                     
-                    const runtime = this.content.runtime || this.content.episode_run_time?.[0] || 90;
-                    const estimatedProgress = 15; // Assume 15% progress
-                    const timeRemaining = Math.floor(runtime * (100 - estimatedProgress) / 100);
+                    // Get runtime - for TV use episode runtime, for movies use movie runtime
+                    const runtime = this.isShow 
+                        ? (this.content.episode_run_time?.[0] || 45) 
+                        : (this.content.runtime || 90);
+                    
+                    const estimatedProgress = 15;
+                    const totalMinsRemaining = Math.floor(runtime * (100 - estimatedProgress) / 100);
+                    
+                    // Format time remaining as hours + mins
+                    let timeRemaining;
+                    if (totalMinsRemaining >= 60) {
+                        const hrs = Math.floor(totalMinsRemaining / 60);
+                        const mins = totalMinsRemaining % 60;
+                        timeRemaining = mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+                    } else {
+                        timeRemaining = `${totalMinsRemaining}m`;
+                    }
                     
                     const watchItem = {
                         id: this.contentId,
@@ -1962,19 +1984,17 @@
                         poster_path: this.content.poster_path,
                         vote_average: this.content.vote_average,
                         progress: estimatedProgress,
-                        timeRemaining: `${timeRemaining}m`,
+                        timeRemaining: timeRemaining,
                         lastWatched: Date.now(),
                         season: this.isShow ? this.selectedSeason : null,
                         episode: this.isShow ? this.selectedEpisode : null,
-                        source: this.selectedSource // Save the source!
+                        source: this.selectedSource
                     };
                     
-                    // Remove old entry if exists
-                    const key = this.isShow ? `${this.contentId}-${this.selectedSeason}-${this.selectedEpisode}` : this.contentId;
-                    const filtered = continueWatching.filter(item => {
-                        const itemKey = item.season ? `${item.id}-${item.season}-${item.episode}` : item.id;
-                        return itemKey !== key;
-                    });
+                    // For TV shows: key is just the show ID so it always updates the same entry
+                    // For movies: key is the movie ID
+                    const key = String(this.contentId);
+                    const filtered = continueWatching.filter(item => String(item.id) !== key);
                     
                     // Add to front (most recent)
                     filtered.unshift(watchItem);
@@ -1983,7 +2003,7 @@
                     const limited = filtered.slice(0, 20);
                     
                     localStorage.setItem('continueWatching', JSON.stringify(limited));
-                    console.log('[Continue Watching] Saved! Total items:', limited.length);
+                    console.log('[Continue Watching] Saved! S' + this.selectedSeason + 'E' + this.selectedEpisode + ' | ' + timeRemaining + ' remaining');
                 },
             }
         }
