@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HGL07M90WG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-HGL07M90WG');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcturus</title>
+    <meta content="Arcturus" property="og:title" />
+    <meta name="keywords"
+        content="free movies, free streaming, watch movies online, free tv shows, streaming service, watch movies free, online streaming, Arcturusstream, free movies online, free series online">
+    <meta
+        content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone."
+        property="og:description" />
+    <meta content="https://Arcturusstream.top" property="og:url" />
+    <meta content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png" property="og:image" />
+    <meta content="#A17FC0" data-react-helmet="true" name="theme-color" />
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:url" content="https://Arcturusstream.top">
+    <meta property="twitter:title" content="Arcturus - Watch Movies & TV Shows">
+    <meta property="twitter:description"
+        content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="sources.js"></script>
+    <!-- Ad Blocker -->
+    <script src="ad-blocker.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @keyframes slide-down {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-down {
+            animation: slide-down 0.5s ease-out;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px rgba(167, 139, 250, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(167, 139, 250, 0.3);
+            }
+        }
+
+        .search-container {
+            position: relative;
+            width: 256px;
+        }
+
+        .search-container::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: radial-gradient(circle at var(--mouse-x, center) var(--mouse-y, center),
+                    rgba(168, 85, 247, 0.5) 0%,
+                    rgba(168, 85, 247, 0.2) 25%,
+                    transparent 70%);
+            border-radius: 9999px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .search-container:hover::before,
+        .search-container:focus-within::before {
+            opacity: 1;
+        }
+
+        .search-input {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            padding-right: 5rem !important;
+        }
+
+        [x-cloak] { display: none !important; }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card-hover::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(35deg,
+                    rgba(168, 85, 247, 0.4),
+                    rgba(168, 85, 247, 0),
+                    rgba(139, 92, 246, 0.4));
+            border-radius: 0.5rem;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-hover:hover::after {
+            opacity: 1;
+        }
+
+        .card-hover:hover .card-overlay {
+            opacity: 1;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.95) 0%,
+                    rgba(0, 0, 0, 0.8) 40%,
+                    rgba(0, 0, 0, 0.2) 100%);
+        }
+
+        .card-overlay {
+            opacity: 0;
+            transition: all 0.4s ease;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.9) 0%,
+                    rgba(0, 0, 0, 0.7) 50%,
+                    rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .card-hover:hover img {
+            filter: blur(2px) brightness(0.9);
+            transition: all 0.4s ease;
+        }
+
+        .card-hover img {
+            transition: all 0.4s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(to right, #a78bfa, #4c1d95);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: #a78bfa;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .glass-effect {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-animation {
+            animation: modalFade 0.3s ease-out;
+        }
+
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .floating-button {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+            transform: scale(1.02);
+            background: rgba(31, 41, 55, 0.9);
+        }
+
+        .search-input:focus+div {
+            opacity: 0.7;
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .search-input+div {
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .scroll-top-button {
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top-button.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #githubButton img,
+        #kofiButton img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(180deg);
+            }
+        }
+
+        .settings-icon {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .settings-icon:hover {
+            transform: rotate(180deg);
+        }
+        /* Hide scrollbar on all scroll rows */
+        .scroll-row {
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+        .scroll-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Blur fade on right edge */
+        .scroll-wrapper {
+            position: relative;
+        }
+        .scroll-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(10, 10, 20, 0.95));
+            pointer-events: none;
+            z-index: 2;
+            transition: opacity 0.3s;
+        }
+        .scroll-wrapper.at-end::after {
+            opacity: 0;
+        }
+
+        /* Arrow circle buttons */
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.85);
+            border: 2px solid rgba(167, 139, 250, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+            transition: all 0.2s ease;
+        }
+        .scroll-btn:hover {
+            background: rgba(139, 92, 246, 1);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.8);
+        }
+        .scroll-btn.left { left: -16px; }
+        .scroll-btn.right { right: -16px; }
+        .scroll-btn.hidden-btn { opacity: 0; pointer-events: none; }
+        /* Hide scrollbar on all scroll rows */
+        .scrollbar-hide {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Purple scrollbar for all scroll rows */
+        .scrollbar-purple {
+            scrollbar-width: thin;
+            scrollbar-color: #7c3aed #1e1b4b;
+        }
+        .scrollbar-purple::-webkit-scrollbar {
+            height: 4px;
+        }
+        .scrollbar-purple::-webkit-scrollbar-track {
+            background: #1e1b4b;
+            border-radius: 999px;
+        }
+        .scrollbar-purple::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 999px;
+        }
+        .scrollbar-purple::-webkit-scrollbar-thumb:hover {
+            background: #a855f7;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen" x-data="app()" @keydown.meta.k.prevent="$refs.searchInput.focus()"
+    @keydown.ctrl.k.prevent="$refs.searchInput.focus()">
+
+    <div x-show="localStorage.getItem('showParticles') !== 'false'" id="particles-js"
+        class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- navigation -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 md:space-x-8">
+                    <div class="flex items-center space-x-3">
+                        <img src="logo.png" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
+                        <span class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800">Arcturus</span>
+                    </div>
+
+                    <!-- Live User Counter -->
+                    <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-purple-600/10 border border-purple-500/30 rounded-full">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        </span>
+                        <span class="text-sm font-semibold text-purple-300" id="live-user-count">...</span>
+                        <span class="text-xs text-gray-400">watching</span>
+                    </div>
+                    
+                    <!-- mobile search bar -->
+                    <div class="md:hidden relative">
+                        <input type="text" x-model="searchQuery" @keyup.debounce.300ms="searchContent()"
+                            placeholder="Search..."
+                            class="w-32 bg-gray-800 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                    </div>
+                    <div class="hidden md:flex space-x-6">
+                        <button @click="currentTab = currentTab === 'movies' ? 'shows' : 'movies'" class="nav-link">
+                            <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
+                        </button>
+                        <a href="livesports.html" class="nav-link">Live Sports</a>
+                        <button @click="showWatchLater = true" class="nav-link flex items-center space-x-2">
+                            <span>Watch Later</span>
+                            <span x-show="watchLaterCount > 0"
+                                class="bg-purple-600 text-white text-xs flex items-center justify-center rounded-full w-6 h-6"
+                                x-text="watchLaterCount"></span>
+                        </button>
+                        <a href="https://github.com/ambr0sial/Arcturus" target="_blank"
+                            class="nav-link flex items-center">
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://ko-fi.com/ambrosial" target="_blank" class="nav-link flex items-center">
+                            <span>Ko-Fi</span>
+                        </a>
+                        <a href="https://discord.gg/s9kUZw7CqP" target="_blank" class="nav-link flex items-center">
+                            <span>Discord</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="search-container hidden md:block">
+                            <input type="text" x-ref="searchInput" x-model="searchQuery"
+                                @keyup.debounce.300ms="searchContent()" placeholder="Search..."
+                                class="search-input bg-gray-800 rounded-full px-6 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 w-64">
+                            <div
+                                class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1 text-gray-400 pointer-events-none select-none">
+                                <span class="text-xs bg-gray-700 rounded px-1.5 py-0.5">⌘</span>
+                                <span class="text-xs bg-gray-700 rounded px-1.5 py-0.5">K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="settings.html" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"
+                        title="Settings">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 settings-icon" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </a>
+                    <!-- mobile menu button -->
+                    <button @click="mobileMenu = !mobileMenu" class="md:hidden text-gray-300 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- mobile menu -->
+            <div x-show="mobileMenu" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-2" class="md:hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-4">
+                    <button @click="currentTab = currentTab === 'movies' ? 'shows' : 'movies'; mobileMenu = false"
+                        class="text-left px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
+                        <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
+                    </button>
+                    <a href="livesports.html" class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Live
+                        Sports</a>
+                    <button @click="showWatchLater = true; mobileMenu = false"
+                        class="flex items-center justify-between px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
+                        <span>Watch Later</span>
+                        <span x-show="watchLaterCount > 0"
+                            class="bg-purple-600 text-white text-xs flex items-center justify-center rounded-full w-6 h-6"
+                            x-text="watchLaterCount"></span>
+                    </button>
+                    <a href="settings.html"
+                        class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors flex items-center space-x-2">
+                        <span>Settings</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com/ambr0sial/Arcturus" target="_blank"
+                        class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">GitHub</a>
+                    <a href="https://ko-fi.com/ambrosial" target="_blank"
+                        class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Ko-Fi</a>
+                    <a href="https://discord.gg/s9kUZw7CqP" target="_blank"
+                        class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Discord</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SEARCH MODAL -->
+    <div x-show="searchQuery && searchQuery.trim().length > 0" x-cloak
+         class="fixed inset-0 z-[110] bg-gray-900 overflow-y-auto pt-24">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold">Search: <span x-text="searchQuery" class="text-purple-500"></span></h2>
+                <button @click="searchQuery = ''" class="text-4xl hover:text-red-500">&times;</button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 pb-20">
+                <template x-for="item in filteredContent" :key="item.id">
+                    <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                       class="relative card-hover bg-gray-800 rounded-lg overflow-hidden aspect-[2/3]">
+                        <img :src="item.poster_path ? 'https://image.tmdb.org/t/p/w500' + item.poster_path : 'https://via.placeholder.com/500x750'"
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex items-end p-4">
+                            <div>
+                                <p class="font-bold text-sm" x-text="item.title || item.name"></p>
+                                <p class="text-xs text-gray-300" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                            </div>
+                        </div>
+                    </a>
+                </template>
+            </div>
+            <div x-show="filteredContent.length === 0" class="text-center py-20 text-gray-500">
+                No results found
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT (hidden when searching) -->
+    <div x-show="!searchQuery || searchQuery.trim().length === 0">
+    <!-- update message -->
+    <div x-data="{ show: true }" x-show="show && localStorage.getItem('showUpdateNotice') !== 'false'"
+        class="fixed top-[3.5rem] md:top-16 left-0 right-0 z-40 animate-slide-down"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="transform -translate-y-full"
+        x-transition:enter-end="transform translate-y-0" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="transform translate-y-0" x-transition:leave-end="transform -translate-y-full">
+        <div class="bg-gray-900 border-b border-purple-500/20">
+            <div class="container mx-auto px-6 py-2 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <!-- <span class="text-purple-400">🎉</span> -->
+                    <p class="text-sm">
+                        <span class="font-semibold text-purple-400">Update (16/07/25)</span>
+                        <span class="text-gray-300 text-xs sm:text-sm">Updated and Added more sources!🎉</span>
+                    </p>
+                </div>
+                <button @click="show = false" class="text-gray-400 hover:text-white transition-colors">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- hero section -->
+    <div class="pt-24 pb-12 px-6">
+        <div class="container mx-auto">
+            
+            <!-- Continue Watching Section -->
+            <section class="mb-12" x-data="{
+                items: [],
+                loadItems() {
+                    const data = localStorage.getItem('continueWatching');
+                    console.log('[Section] Raw localStorage:', data);
+                    if (data) {
+                        this.items = JSON.parse(data);
+                        console.log('[Section] Parsed items:', this.items.length);
+                    }
+                }
+            }" x-init="loadItems()">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h2 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800">
+                            Continue Watching
+                        </h2>
+                        <span class="text-sm text-gray-400" x-text="'(' + items.length + ' items)'"></span>
+                    </div>
+                    <div class="flex gap-3">
+                        <button @click="loadItems()" 
+                                class="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-purple-500/50 transform hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:rotate-180 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            <span class="text-sm font-medium">Reload</span>
+                        </button>
+                        <button @click="if(confirm('Clear all continue watching history?')) { localStorage.removeItem('continueWatching'); items = []; }" 
+                                class="group flex items-center gap-2 px-4 py-2 bg-gray-800/60 hover:bg-red-600 border border-gray-700 hover:border-red-500 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/30 transform hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:scale-110 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span class="text-sm font-medium text-gray-300 group-hover:text-white">Clear All</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div x-show="items.length === 0" class="text-center py-8 text-gray-400">
+                    No items yet. Start watching something!
+                </div>
+                
+                <div x-show="items.length > 0" class="relative">
+                    <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-gray-800">
+                        <template x-for="(item, index) in items" :key="index">
+                            <div class="relative flex-shrink-0 w-48 md:w-56">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + item.type + (item.season ? '&season=' + item.season + '&episode=' + item.episode : '') + (item.source ? '&source=' + item.source : '')"
+                                   class="block rounded-lg overflow-hidden bg-gray-800 card-hover">
+                                    <div class="relative aspect-[2/3]">
+                                        <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                             :alt="item.title || item.name"
+                                             class="w-full h-full object-cover"
+                                             @error="event => {
+                                                 event.target.src = '/logo.png';
+                                                 event.target.classList.remove('object-cover');
+                                                 event.target.classList.add('object-contain');
+                                             }">
+                                        
+                                        <!-- Progress Bar -->
+                                        <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
+                                            <div class="h-full bg-purple-500" :style="'width: ' + item.progress + '%'"></div>
+                                        </div>
+                                        
+                                        <!-- Episode Badge for TV Shows -->
+                                        <div x-show="item.season" class="absolute top-2 left-2 bg-black bg-opacity-75 px-2 py-1 rounded text-xs">
+                                            <span x-text="'S' + item.season + ' E' + item.episode"></span>
+                                        </div>
+                                        
+                                        <!-- Time Remaining -->
+                                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-75 px-2 py-1 rounded text-xs">
+                                            <span x-text="item.timeRemaining + ' left'"></span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                        <p class="text-sm font-bold truncate" x-text="item.title || item.name"></p>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click="items = items.filter(i => (i.season ? i.id + '-' + i.season + '-' + i.episode : i.id) !== (item.season ? item.id + '-' + item.season + '-' + item.episode : item.id)); localStorage.setItem('continueWatching', JSON.stringify(items))" 
+                                        class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-red-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+                <h2 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800"
+                    x-text="currentTab === 'movies' ? 'Popular Movies' : 'Popular TV Shows'"></h2>
+                <button @click="pickRandomFromCategories()"
+                    class="mt-4 md:mt-0 bg-gradient-to-r from-purple-600 to-violet-600 text-white px-6 py-3 rounded-lg hover:brightness-110 transition-all duration-300 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                    </svg>
+                    <span>Random Pick</span>
+                </button>
+            </div>
+
+            <!-- Popular and Netflix Categories -->
+            <div class="mb-12 space-y-12">
+                <!-- Popular Section -->
+                <section x-show="popular && popular.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold text-white/80">Popular</h3>
+                        <div class="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in popular" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Netflix Originals Section -->
+                <section x-show="netflix && netflix.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-8 h-8" viewBox="0 0 111 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M105.062 14.28L111 30C109.719 29.644 108.476 29.172 107.286 28.595L103.821 20.782L100.33 28.595C99.143 29.172 97.9 29.644 96.619 30L102.557 14.28L97.25 0.595C98.531 0.951 99.774 1.423 100.964 2L103.821 9.22L106.679 2C107.869 1.423 109.112 0.951 110.393 0.595L105.062 14.28Z" fill="#E50914"/>
+                                <path d="M90.518 30V0.595H94.286V30H90.518Z" fill="#E50914"/>
+                                <path d="M81.429 30V3.69H76.905V0.595H89.524V3.69H85V30H81.429Z" fill="#E50914"/>
+                                <path d="M68.452 30V0.595H72.22V26.905H81.905V30H68.452Z" fill="#E50914"/>
+                                <path d="M58.333 30V0.595H70.833V3.69H62.101V13.095H70.238V16.19H62.101V30H58.333Z" fill="#E50914"/>
+                                <path d="M46.786 30V0.595H50.554V13.69L59.226 0.595H63.69L54.405 14.28L63.69 30H59.226L50.554 16.19V30H46.786Z" fill="#E50914"/>
+                                <path d="M36.667 30V0.595H40.435V30H36.667Z" fill="#E50914"/>
+                                <path d="M31.548 30V3.69H27.024V0.595H39.643V3.69H35.119V30H31.548Z" fill="#E50914"/>
+                                <path d="M17.857 30L11.31 16.19V30H7.542V0.595H11.31L17.857 14.405V0.595H21.625V30H17.857Z" fill="#E50914"/>
+                            </svg>
+                            <h3 class="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                                ORIGINALS
+                            </h3>
+                        </div>
+                        <div class="h-px flex-1 bg-gradient-to-r from-red-600/40 to-transparent"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in netflix" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Trending This Week Section -->
+                <section x-show="trending && trending.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">✨ Trending Now</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-pink-500/20 to-purple-500/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in trending" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Disney+ Section -->
+                <section x-show="disney && disney.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">✧ Disney Magic</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-blue-400/20 to-cyan-300/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in disney" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- HBO Section -->
+                <section x-show="hbo && hbo.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-500 bg-clip-text text-transparent">◆ HBO Prestige</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-purple-600/20 to-indigo-500/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in hbo" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Apple TV+ Section -->
+                <section x-show="apple && apple.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-gray-300 to-gray-100 bg-clip-text text-transparent">⚬ Apple Exclusives</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-gray-300/20 to-gray-100/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in apple" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Amazon Prime Section -->
+                <section x-show="prime && prime.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">▸ Prime Picks</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-sky-400/20 to-blue-500/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in prime" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- New Releases Section -->
+                <section x-show="newReleases && newReleases.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">◉ Fresh Drops</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-green-400/20 to-emerald-500/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in newReleases" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Action Section -->
+                <section x-show="action && action.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">⚡ Action Packed</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-orange-500/20 to-red-600/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in action" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Comedy Section -->
+                <section x-show="comedy && comedy.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">☻ Laugh Lounge</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-yellow-400/20 to-amber-500/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in comedy" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Horror Section -->
+                <section x-show="horror && horror.length > 0">
+                    <div class="flex items-center gap-4 mb-6">
+                        <h3 class="text-lg font-bold bg-gradient-to-r from-red-600 to-gray-900 bg-clip-text text-transparent">☠ Dark Cinema</h3>
+                        <div class="h-px flex-1 bg-gradient-to-r from-red-600/20 to-gray-900/20"></div>
+                    </div>
+                    <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
+                        <template x-for="(item, index) in horror" :key="item.id">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                                <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
+                                    class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
+                                    <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                        :alt="item.title || item.name" class="w-full h-full object-cover"
+                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
+                                        <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
+                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                    </div>
+                                </a>
+                                <button @click.stop="toggleWatchLater(item)"
+                                    class="absolute top-2 right-2 p-1.5 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300"
+                                    :class="isInWatchLater(item) ? 'text-purple-400' : 'text-white'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- streaming services -->
+    <div class="container mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div class="text-center mb-6 md:mb-8">
+            <h2 class="text-xl md:text-2xl font-bold text-gray-300">Content Available From</h2>
+            <p class="text-sm md:text-base text-gray-400 mt-2">Arcturus aggregates content from various premium
+                streaming
+                platforms</p>
+        </div>
+        <div
+            class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 items-center justify-items-center opacity-80">
+            <a href="https://netflix.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(229,9,20,0.7)]">
+            </a>
+            <a href="https://www.primevideo.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/Amazon_Prime_Video_logo.svg"
+                    alt="Prime Video"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(0,168,225,0.7)]">
+            </a>
+            <a href="https://www.disneyplus.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" alt="Disney+"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(113,168,255,0.7)]">
+            </a>
+            <a href="https://www.hulu.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Hulu_logo_%282018%29.svg" alt="Hulu"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(28,231,131,0.7)]">
+            </a>
+            <a href="https://www.max.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg" alt="HBO Max"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(116,80,254,0.7)]">
+            </a>
+            <a href="https://tv.apple.com" target="_blank" class="transform transition-transform hover:scale-105">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg" alt="Apple TV+"
+                    class="h-6 md:h-8 w-auto grayscale hover:grayscale-0 hover:scale-110 hover:brightness-125 transition-all duration-300 transform hover:drop-shadow-[0_0_7px_rgba(0,244,244,0.7)]">
+            </a>
+        </div>
+    </div>
+
+    </div>
+    <!-- END MAIN CONTENT WRAPPER -->
+
+    <footer class="text-gray-400 py-4 md:py-6 mt-8 md:mt-12">
+        <div class="container mx-auto px-4 md:px-6 text-center">
+            <p class="text-xs md:text-sm">
+                Arcturus doesn't store files, but provides links to external services. Legal issues should be discussed
+                with
+                file providers and hosts. The files provided by video providers are not covered by Arcturus.
+            </p>
+            <p class="mt-2 text-xs">
+                Made with ❤ by Ambrosial. 07/04/25
+            </p>
+            <p class="mt-2 text-xs">
+                <a href="/cdn-cgi/l/email-protection#b5d6dadbc1d4d6c19bf4c7d6c1c0c7c0c6c6c1c7d0d4d8f5d2d8d4dcd99bd6dad8" class="text-purple-400 hover:text-purple-300 transition-colors"><span class="__cf_email__" data-cfemail="4c2f2322382d2f38620d3e2f38393e393f3f383e292d210c2b212d2520622f2321">[email&#160;protected]</span></a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- particles.js -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#a855f7'
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.2,
+                    random: true,
+                    animation: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    animation: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#a855f7',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                }
+            },
+            interactivity: {
+                detect_on: 'window',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+    </script>
+
+    <!-- watch later modal -->
+    <div x-show="showWatchLater"
+        class="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-90 flex items-start justify-center"
+        @click.away="showWatchLater = false" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0">
+        <div class="bg-gray-900 rounded-lg w-full max-w-4xl mt-20 modal-animation">
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold">Watch Later</h2>
+                    <div class="flex items-center space-x-4">
+                        <button @click="showClearConfirm = true" x-show="watchLaterItems.length > 0"
+                            class="text-gray-400 hover:text-red-500 flex items-center space-x-2 transition-colors duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span>Clear All</span>
+                        </button>
+                        <button @click="showWatchLater = false" class="text-gray-500 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div x-show="!watchLaterItems.length" class="text-center text-gray-500 py-8">
+                    No items in your watch later list
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <template x-for="item in watchLaterItems" :key="item.id">
+                        <div class="relative bg-gray-800 rounded-lg overflow-hidden">
+                            <a :href="'watch.html?id=' + item.id + '&type=' + item.type" class="block">
+                                <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
+                                    :alt="item.title || item.name" class="w-full h-48 object-cover">
+                                <div class="p-4">
+                                    <h3 class="font-medium" x-text="item.title || item.name"></h3>
+                                    <p class="text-gray-400 text-sm mt-1"
+                                        x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
+                                </div>
+                            </a>
+                            <button @click="toggleWatchLater(item)"
+                                class="absolute top-2 right-2 p-2 bg-gray-900 bg-opacity-75 rounded-full hover:bg-purple-600 transition-all duration-300 text-purple-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- clear confirmation modal -->
+    <div x-show="showClearConfirm"
+        class="fixed inset-0 z-[60] overflow-auto bg-black bg-opacity-90 flex items-center justify-center"
+        @click.away="showClearConfirm = false" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform scale-100"
+        x-transition:leave-end="opacity-0 transform scale-95">
+        <div class="bg-gray-900 rounded-lg w-full max-w-md p-6 modal-animation">
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 rounded-full bg-red-500 bg-opacity-10 mx-auto flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Clear Watch Later List?</h3>
+                <p class="text-gray-400 mb-6">This action cannot be undone. Are you sure you want to remove all items
+                    from your watch later list?</p>
+                <div class="flex space-x-3 justify-center">
+                    <button @click="showClearConfirm = false"
+                        class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors duration-300">
+                        Cancel
+                    </button>
+                    <button @click="doClearWatchLater()"
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-300">
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- context menu -->
+    <div x-data="contextMenuHandler()" x-show="$store.contextMenu.show" @click.away="$store.contextMenu.show = false"
+        @keydown.escape.window="$store.contextMenu.show = false"
+        :style="`position: fixed; left: ${$store.contextMenu.x}px; top: ${$store.contextMenu.y}px`"
+        class="bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 w-56 py-2 animate-fade-in" x-cloak>
+
+        <div class="px-4 py-2 border-b border-gray-700">
+            <h3 class="text-sm font-medium text-gray-300"
+                x-text="$store.contextMenu.item?.title || $store.contextMenu.item?.name"></h3>
+        </div>
+
+        <a :href="'https://www.themoviedb.org/' + (currentTab === 'movies' ? 'movie' : 'tv') + '/' + $store.contextMenu.item?.id"
+            target="_blank" class="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            View on TMDB
+        </a>
+
+        <button @click="copyToClipboard($store.contextMenu.item?.title || $store.contextMenu.item?.name)"
+            class="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            Copy Title
+        </button>
+
+        <button @click="copyToClipboard($store.contextMenu.item?.id)"
+            class="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Copy TMDB ID
+        </button>
+
+        <button @click="copyToClipboard($store.contextMenu.item?.overview)"
+            class="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+            Copy Overview
+        </button>
+
+        <div class="border-t border-gray-700 my-2"></div>
+
+        <button @click="toggleWatchLater($store.contextMenu.item); $store.contextMenu.show = false"
+            class="px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center gap-2 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+            <span
+                x-text="isInWatchLater($store.contextMenu.item) ? 'Remove from Watch Later' : 'Add to Watch Later'"></span>
+        </button>
+    </div>
+
+    <!-- toast notification -->
+    <div x-data="toastHandler()" x-show="show" @show-toast.window="showToast($event.detail.message)"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-8"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform translate-y-0"
+        x-transition:leave-end="opacity-0 transform translate-y-8"
+        class="fixed bottom-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-xl z-[100] flex items-center gap-2"
+        style="pointer-events: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-400 flex-shrink-0" viewBox="0 0 20 20"
+            fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+        </svg>
+        <span x-text="message" class="text-sm"></span>
+    </div>
+
+    <script>
+        function toastHandler() {
+            return {
+                message: '',
+                show: false,
+                showToast(msg) {
+                    this.message = msg;
+                    this.show = true;
+                    setTimeout(() => {
+                        this.show = false;
+                    }, 3000);
+                }
+            }
+        }
+
+        function contextMenuHandler() {
+            return {
+                copyToClipboard(text) {
+                    if (!text) return;
+                    navigator.clipboard.writeText(text).then(() => {
+                        window.dispatchEvent(new CustomEvent('show-toast', {
+                            detail: { message: 'Copied to clipboard!' }
+                        }));
+                    }).catch(() => {
+                        window.dispatchEvent(new CustomEvent('show-toast', {
+                            detail: { message: 'Failed to copy to clipboard' }
+                        }));
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('contextMenu', {
+                show: false,
+                x: 0,
+                y: 0,
+                item: null
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const discordPopupSeen = localStorage.getItem('discordPopupSeen');
+
+            if (!discordPopupSeen) {
+                const popup = document.createElement('div');
+                popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75';
+                popup.innerHTML = `
+                    <div class="bg-gray-800 rounded-lg p-6 text-center space-y-4 max-w-sm">
+                        <h2 class="text-xl font-bold text-purple-400">Arcturus has a Discord Server!</h2>
+                        <p class="text-gray-300">Join the community for updates and discussions <3</p>
+                        <a href="https://discord.gg/s9kUZw7CqP" target="_blank" 
+                            class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-white inline-block">
+                            Join Now
+                        </a>
+                        <button id="closePopup" 
+                            class="text-gray-500 hover:text-gray-300 focus:outline-none">
+                            Dismiss
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(popup);
+
+                document.getElementById('closePopup').addEventListener('click', function () {
+                    popup.style.display = 'none';
+                    localStorage.setItem('discordPopupSeen', 'true');
+                });
+            }
+        });
+
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('contextMenu', {
+                show: false,
+                x: 0,
+                y: 0,
+                item: null
+            });
+        });
+
+        function app() {
+            return {
+                apiKey: '1070730380f5fee0d87cf0382670b255',
+                content: [],
+                currentTab: 'movies',
+                language: localStorage.getItem('selectedLanguage') || 'en',
+                searchQuery: '',
+                currentPage: 1,
+                showWatchLater: false,
+                watchLaterItems: [],
+                continueWatchingItems: [],
+                watchLaterCount: 0,
+                liveUsers: 0,
+                showModal: false,
+                selectedContent: null,
+                currentVideoUrl: '',
+                selectedSeason: 1,
+                selectedEpisode: 1,
+                seasons: [],
+                episodes: [],
+                selectedSource: localStorage.getItem('defaultSource') || 'embedsu',
+                availableSources: availableSources,
+                showClearConfirm: false,
+                genres: [],
+                selectedGenre: '',
+                minRating: '',
+                filteredContent: [],
+                mobileMenu: false,
+                sortBy: 'popularity.desc',
+                yearRange: '',
+                selectedLanguage: '',
+                popular: [],
+                netflix: [],
+                trending: [],
+                disney: [],
+                hbo: [],
+                apple: [],
+                prime: [],
+                newReleases: [],
+                action: [],
+                comedy: [],
+                horror: [],
+
+                async init() {
+                    const savedItems = localStorage.getItem('watchLater');
+                    if (savedItems) {
+                        this.watchLaterItems = JSON.parse(savedItems);
+                        this.watchLaterCount = this.watchLaterItems.length;
+                    }
+                    
+                    // Initialize live user counter
+                    this.updateLiveUsers();
+                    setInterval(() => this.updateLiveUsers(), 15000); // Update every 15 seconds
+                    
+                    // Load continue watching
+                    this.loadContinueWatching();
+                    
+                    // Listen for storage changes (when watching on another tab)
+                    window.addEventListener('storage', (e) => {
+                        if (e.key === 'continueWatching') {
+                            console.log('[Homepage] Continue watching updated');
+                            this.loadContinueWatching();
+                        }
+                    });
+                    
+                    // Also check periodically (for same tab)
+                    setInterval(() => {
+                        this.loadContinueWatching();
+                    }, 5000);
+
+                    await this.fetchGenres();
+                    await this.fetchContent();
+                    await this.fetchPopularAndNetflix();
+
+                    this.$watch('currentTab', async () => {
+                        this.currentPage = 1;
+                        this.selectedGenre = '';
+                        this.minRating = '';
+                        this.yearRange = '';
+                        await this.fetchGenres();
+                        await this.fetchContent();
+                        await this.fetchPopularAndNetflix();
+                    });
+
+                    this.$watch('language', () => {
+                        this.currentPage = 1;
+                        this.fetchContent();
+                    });
+                },
+
+                async fetchGenres() {
+                    const baseUrl = 'https://api.themoviedb.org/3';
+                    const endpoint = this.currentTab === 'movies' ? 'genre/movie/list' : 'genre/tv/list';
+                    const url = `${baseUrl}/${endpoint}?api_key=${this.apiKey}&language=${this.language}`;
+
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.genres = data.genres;
+                    } catch (error) {
+                        console.error('Error fetching genres:', error);
+                    }
+                },
+
+                getGenreName(genreId) {
+                    const genre = this.genres.find(g => g.id === parseInt(genreId));
+                    return genre ? genre.name : '';
+                },
+
+                async applyFilters() {
+                    const baseUrl = 'https://api.themoviedb.org/3/discover';
+                    const endpoint = this.currentTab === 'movies' ? 'movie' : 'tv';
+
+                    let params = new URLSearchParams({
+                        api_key: this.apiKey,
+                        language: `${this.language}-${this.language.toUpperCase()}`,
+                        page: this.currentPage,
+                        sort_by: this.sortBy
+                    });
+
+                    if (this.selectedGenre) {
+                        params.append('with_genres', this.selectedGenre);
+                    }
+
+                    if (this.minRating) {
+                        params.append('vote_average.gte', this.minRating);
+                    }
+
+                    if (this.selectedLanguage) {
+                        params.append('with_original_language', this.selectedLanguage);
+                    }
+
+                    if (this.yearRange) {
+                        const [startYear, endYear] = this.yearRange.split(',');
+                        params.append('primary_release_date.gte', `${startYear}-01-01`);
+                        params.append('primary_release_date.lte', `${endYear}-12-31`);
+                    }
+
+                    const url = `${baseUrl}/${endpoint}?${params.toString()}`;
+
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.content = data.results;
+                        this.filteredContent = this.content;
+                    } catch (error) {
+                        console.error('Error applying filters:', error);
+                    }
+                },
+
+                getLanguageName(code) {
+                    const languages = {
+                        en: 'English',
+                        fr: 'French',
+                        es: 'Spanish',
+                        de: 'German',
+                        it: 'Italian',
+                        ja: 'Japanese',
+                        ko: 'Korean'
+                    };
+                    return languages[code] || code;
+                },
+
+                getYearRangeName(range) {
+                    if (!range) return '';
+                    const [start, end] = range.split(',');
+                    const decade = Math.floor(start / 10) * 10;
+                    return `${decade}s`;
+                },
+
+                get hasActiveFilters() {
+                    return this.selectedGenre || this.minRating || this.yearRange || this.selectedLanguage;
+                },
+
+                clearAllFilters() {
+                    this.selectedGenre = '';
+                    this.minRating = '';
+                    this.yearRange = '';
+                    this.selectedLanguage = '';
+                    this.applyFilters();
+                },
+
+                async fetchContent() {
+                    const baseUrl = 'https://api.themoviedb.org/3';
+                    const type = this.currentTab === 'movies' ? 'movie' : 'tv';
+                    
+                    // Get current date and date from 6 months ago for recent releases
+                    const today = new Date();
+                    const sixMonthsAgo = new Date();
+                    sixMonthsAgo.setMonth(today.getMonth() - 6);
+                    
+                    const releaseDateParam = this.currentTab === 'movies' ? 'primary_release_date' : 'first_air_date';
+                    const url = `${baseUrl}/discover/${type}?api_key=${this.apiKey}&language=${this.language}&page=${this.currentPage}&sort_by=${releaseDateParam}.desc&${releaseDateParam}.lte=${today.toISOString().split('T')[0]}&${releaseDateParam}.gte=${sixMonthsAgo.toISOString().split('T')[0]}`;
+
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.content = data.results;
+                        console.log('[Content] Loaded recent releases sorted by date (newest first)');
+                        this.applyFilters();
+                    } catch (error) {
+                        console.error('Error fetching content:', error);
+                    }
+                },
+
+                async fetchPopularAndNetflix() {
+                    const baseUrl = 'https://api.themoviedb.org/3';
+                    const type = this.currentTab === 'movies' ? 'movie' : 'tv';
+
+                    try {
+                        // Fetch all content in parallel
+                        const [
+                            popularRes,
+                            netflixRes1, netflixRes2, netflixRes3,
+                            trendingRes,
+                            disneyRes,
+                            hboRes,
+                            appleRes,
+                            primeRes,
+                            newReleasesRes,
+                            actionRes,
+                            comedyRes,
+                            horrorRes
+                        ] = await Promise.all([
+                            // Popular
+                            fetch(`${baseUrl}/${type}/popular?api_key=${this.apiKey}&language=${this.language}&page=1`),
+                            // Netflix (3 pages for variety)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=213&sort_by=popularity.desc&page=1`),
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=213&sort_by=popularity.desc&page=2`),
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=213&sort_by=popularity.desc&page=3`),
+                            // Trending
+                            fetch(`${baseUrl}/trending/${type}/week?api_key=${this.apiKey}`),
+                            // Disney+ (network 2739)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=2739&sort_by=popularity.desc`),
+                            // HBO Max (network 49 for HBO)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=49&sort_by=popularity.desc`),
+                            // Apple TV+ (network 2552)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=2552&sort_by=popularity.desc`),
+                            // Amazon Prime (network 1024 for Prime Video)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_networks=1024&sort_by=popularity.desc`),
+                            // New Releases (last 60 days)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&sort_by=popularity.desc&primary_release_date.gte=${new Date(Date.now() - 60*24*60*60*1000).toISOString().split('T')[0]}`),
+                            // Action (genre 28 for movies, 10759 for TV)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_genres=${type === 'movie' ? '28' : '10759'}&sort_by=popularity.desc`),
+                            // Comedy (genre 35)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_genres=35&sort_by=popularity.desc`),
+                            // Horror (genre 27)
+                            fetch(`${baseUrl}/discover/${type}?api_key=${this.apiKey}&with_genres=27&sort_by=popularity.desc`)
+                        ]);
+
+                        // Parse all responses
+                        const [
+                            popularData,
+                            netflix1, netflix2, netflix3,
+                            trendingData,
+                            disneyData,
+                            hboData,
+                            appleData,
+                            primeData,
+                            newReleasesData,
+                            actionData,
+                            comedyData,
+                            horrorData
+                        ] = await Promise.all([
+                            popularRes.json(),
+                            netflixRes1.json(), netflixRes2.json(), netflixRes3.json(),
+                            trendingRes.json(),
+                            disneyRes.json(),
+                            hboRes.json(),
+                            appleRes.json(),
+                            primeRes.json(),
+                            newReleasesRes.json(),
+                            actionRes.json(),
+                            comedyRes.json(),
+                            horrorRes.json()
+                        ]);
+
+                        // Set Popular
+                        this.popular = popularData.results || [];
+                        const popularIds = new Set(this.popular.map(item => item.id));
+
+                        // Netflix Originals (combine 3 pages, filter duplicates)
+                        const allNetflix = [...(netflix1.results || []), ...(netflix2.results || []), ...(netflix3.results || [])];
+                        this.netflix = allNetflix.filter(item => !popularIds.has(item.id)).slice(0, 20);
+
+                        // Set other categories (filter out Popular duplicates)
+                        this.trending = (trendingData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.disney = (disneyData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.hbo = (hboData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.apple = (appleData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.prime = (primeData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.newReleases = (newReleasesData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.action = (actionData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.comedy = (comedyData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+                        this.horror = (horrorData.results || []).filter(item => !popularIds.has(item.id)).slice(0, 20);
+
+                        console.log('[Categories] Loaded successfully');
+                        
+                    } catch (error) {
+                        console.error('Error fetching content:', error);
+                    }
+                },
+
+                pickRandomFromCategories() {
+                    const allItems = [...this.popular, ...this.netflix];
+                    if (allItems.length === 0) {
+                        alert('No content available yet. Please wait for content to load.');
+                        return;
+                    }
+                    const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
+                    const type = this.currentTab === 'movies' ? 'movie' : 'tv';
+                    window.location.href = `watch.html?id=${randomItem.id}&type=${type}`;
+                },
+
+
+                async searchContent() {
+                    if (!this.searchQuery) {
+                        await this.applyFilters();
+                        return;
+                    }
+
+                    const baseUrl = 'https://api.themoviedb.org/3';
+                    const searchQuery = this.searchQuery.trim();
+
+                    if (searchQuery.startsWith('@')) {
+                        const personName = searchQuery.substring(1);
+                        if (!personName) {
+                            await this.applyFilters();
+                            return;
+                        }
+
+                        const personUrl = `${baseUrl}/search/person?api_key=${this.apiKey}&query=${encodeURIComponent(personName)}`;
+                        try {
+                            const personResponse = await fetch(personUrl);
+                            const personData = await personResponse.json();
+                            const person = personData.results[0];
+
+                            if (person) {
+                                const creditsUrl = `${baseUrl}/person/${person.id}/combined_credits?api_key=${this.apiKey}`;
+                                const creditsResponse = await fetch(creditsUrl);
+                                const creditsData = await creditsResponse.json();
+
+                                this.content = creditsData[this.currentTab === 'movies' ? 'cast' : 'crew']
+                                    .filter(item => this.currentTab === 'movies' ? item.media_type === 'movie' : item.media_type === 'tv')
+                                    .sort((a, b) => {
+                                        const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
+                                        const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
+                                        return dateB - dateA; // Newest first
+                                    })
+                                    .slice(0, 20);
+                            } else {
+                                this.content = [];
+                            }
+                        } catch (error) {
+                            console.error('Error searching person:', error);
+                            this.content = [];
+                        }
+                    } else {
+                        const endpoint = this.currentTab === 'movies' ? 'movie' : 'tv';
+                        const url = `${baseUrl}/search/${endpoint}?api_key=${this.apiKey}&query=${encodeURIComponent(searchQuery)}&language=${this.language}-${this.language.toUpperCase()}&page=${this.currentPage}`;
+
+                        try {
+                            const response = await fetch(url);
+                            const data = await response.json();
+                            
+                            // Sort results by release date (newest first)
+                            this.content = (data.results || []).sort((a, b) => {
+                                const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
+                                const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
+                                return dateB - dateA; // Newest first
+                            });
+                            
+                            console.log('[Search] Results sorted by release date (newest first)');
+                        } catch (error) {
+                            console.error('Error searching content:', error);
+                            this.content = [];
+                        }
+                    }
+
+                    this.filteredContent = this.content.filter(item => {
+                        if (this.selectedGenre && !item.genre_ids?.includes(parseInt(this.selectedGenre))) {
+                            return false;
+                        }
+                        if (this.minRating && item.vote_average < parseFloat(this.minRating)) {
+                            return false;
+                        }
+                        if (this.selectedLanguage && item.original_language !== this.selectedLanguage) {
+                            return false;
+                        }
+                        return true;
+                    });
+                },
+
+                async openContent(item) {
+                    this.selectedContent = item;
+                    this.showModal = true;
+
+                    if (this.currentTab === 'shows') {
+                        const url = `https://api.themoviedb.org/3/tv/${item.id}?api_key=${this.apiKey}`;
+                        try {
+                            const response = await fetch(url);
+                            const data = await response.json();
+                            this.seasons = Array.from({ length: data.number_of_seasons }, (_, i) => i + 1);
+                            this.updateEpisodes();
+                        } catch (error) {
+                            console.error('Error fetching seasons:', error);
+                        }
+                    }
+                    this.updateVideoUrl();
+                },
+
+                getSourceUrl(sourceId, type, params) {
+                    const source = this.availableSources.find(s => s.id === sourceId);
+                    if (!source) return '';
+
+                    let url = source.urls[type];
+                    Object.entries(params).forEach(([key, value]) => {
+                        url = url.replace(`{${key}}`, value);
+                    });
+                    return url;
+                },
+
+                updateVideoUrl() {
+                    const source = this.availableSources.find(s => s.id === this.selectedSource);
+                    if (!source) return '';
+
+                    const params = this.currentTab === 'shows'
+                        ? { id: this.selectedContent.id, season: this.selectedSeason, episode: this.selectedEpisode }
+                        : { id: this.selectedContent.id };
+
+                    this.currentVideoUrl = this.getSourceUrl(
+                        this.selectedSource,
+                        this.currentTab === 'shows' ? 'tv' : 'movie',
+                        params
+                    );
+                },
+
+                async updateEpisodes() {
+                    const url = `https://api.themoviedb.org/3/tv/${this.selectedContent.id}/season/${this.selectedSeason}?api_key=${this.apiKey}`;
+                    try {
+                        const response = await fetch(url);
+                        const data = await response.json();
+                        this.episodes = Array.from({ length: data.episodes.length }, (_, i) => i + 1);
+                        this.selectedEpisode = 1;
+                    } catch (error) {
+                        console.error('Error fetching episodes:', error);
+                    }
+                },
+
+                loadEpisode() {
+                    this.updateVideoUrl();
+                },
+
+                async changePage(page) {
+                    this.currentPage = page;
+                    if (this.searchQuery) {
+                        await this.searchContent();
+                    } else {
+                        await this.fetchContent();
+                    }
+                },
+
+                toggleWatchLater(item) {
+                    const index = this.watchLaterItems.findIndex(i => i.id === item.id);
+                    if (index === -1) {
+                        this.watchLaterItems.push({
+                            ...item,
+                            type: this.currentTab === 'movies' ? 'movie' : 'tv'
+                        });
+                    } else {
+                        this.watchLaterItems.splice(index, 1);
+                    }
+                    this.watchLaterCount = this.watchLaterItems.length;
+                    localStorage.setItem('watchLater', JSON.stringify(this.watchLaterItems));
+                },
+
+                isInWatchLater(item) {
+                    return this.watchLaterItems.some(i => i.id === item.id);
+                },
+
+                clearWatchLater() {
+                    this.showClearConfirm = true;
+                },
+
+                doClearWatchLater() {
+                    this.watchLaterItems = [];
+                    this.watchLaterCount = 0;
+                    localStorage.removeItem('watchLater');
+                    this.showClearConfirm = false;
+                },
+                
+                // Continue Watching Functions
+                loadContinueWatching() {
+                    const continueWatching = localStorage.getItem('continueWatching');
+                    if (continueWatching) {
+                        const items = JSON.parse(continueWatching);
+                        // Sort by most recently watched
+                        items.sort((a, b) => b.lastWatched - a.lastWatched);
+                        this.continueWatchingItems = items;
+                        console.log('[Homepage] Loaded continue watching:', items.length, 'items');
+                    } else {
+                        this.continueWatchingItems = [];
+                        console.log('[Homepage] No continue watching items found');
+                    }
+                },
+                
+                testAddContinueWatching() {
+                    const testItem = {
+                        id: '533535',
+                        type: 'movie',
+                        title: 'Test Movie - Deadpool & Wolverine',
+                        poster_path: '/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
+                        vote_average: 7.7,
+                        progress: 25,
+                        timeRemaining: '60m',
+                        lastWatched: Date.now(),
+                        season: null,
+                        episode: null,
+                        source: 'arcturusapi'
+                    };
+                    
+                    const items = JSON.parse(localStorage.getItem('continueWatching') || '[]');
+                    items.unshift(testItem);
+                    localStorage.setItem('continueWatching', JSON.stringify(items));
+                    this.loadContinueWatching();
+                    console.log('[Homepage] Test item added!');
+                },
+                
+                clearContinueWatching() {
+                    if (confirm('Clear all continue watching items?')) {
+                        this.continueWatchingItems = [];
+                        localStorage.removeItem('continueWatching');
+                    }
+                },
+                
+                removeContinueWatching(item) {
+                    const key = item.season ? `${item.id}-${item.season}-${item.episode}` : item.id;
+                    this.continueWatchingItems = this.continueWatchingItems.filter(i => {
+                        const itemKey = i.season ? `${i.id}-${i.season}-${i.episode}` : i.id;
+                        return itemKey !== key;
+                    });
+                    localStorage.setItem('continueWatching', JSON.stringify(this.continueWatchingItems));
+                },
+
+                pickRandom() {
+                    const randomItem = this.filteredContent[Math.floor(Math.random() * this.filteredContent.length)];
+                    if (randomItem) {
+                        window.location.href = `watch.html?id=${randomItem.id}&type=${this.currentTab === 'movies' ? 'movie' : 'tv'}`;
+                    }
+                },
+
+                updateLiveUsers() {
+                    const hour = new Date().getHours();
+                    const day = new Date().getDay(); // 0 = Sunday, 6 = Saturday
+                    
+                    // Base count on time of day
+                    let baseCount = 200;
+                    
+                    // Weekend gets more users
+                    const isWeekend = day === 0 || day === 6;
+                    const weekendMultiplier = isWeekend ? 1.3 : 1;
+                    
+                    // Time-based patterns
+                    if (hour >= 0 && hour < 6) {
+                        baseCount = 80;  // Late night/early morning
+                    } else if (hour >= 6 && hour < 12) {
+                        baseCount = 180; // Morning
+                    } else if (hour >= 12 && hour < 18) {
+                        baseCount = 320; // Afternoon
+                    } else if (hour >= 18 && hour < 22) {
+                        baseCount = 550; // Prime time (evening peak)
+                    } else if (hour >= 22 && hour < 24) {
+                        baseCount = 380; // Late evening
+                    }
+                    
+                    // Apply weekend multiplier
+                    baseCount = Math.floor(baseCount * weekendMultiplier);
+                    
+                    // Add natural fluctuation (-20 to +20)
+                    const fluctuation = Math.floor(Math.random() * 41) - 20;
+                    
+                    // Calculate final count
+                    let newCount = baseCount + fluctuation;
+                    
+                    // Smooth transition (gradually move toward new count)
+                    if (this.liveUsers === 0) {
+                        this.liveUsers = newCount;
+                    } else {
+                        const diff = newCount - this.liveUsers;
+                        this.liveUsers += Math.floor(diff * 0.3); // 30% transition
+                    }
+                    
+                    // Ensure minimum of 50 users
+                    this.liveUsers = Math.max(50, this.liveUsers);
+                    
+                    console.log(`[Live Users] ${this.liveUsers} watching (${hour}:00, ${isWeekend ? 'Weekend' : 'Weekday'})`);
+                },
+
+                changeLanguage(newLanguage) {
+                    this.language = newLanguage;
+                    localStorage.setItem('selectedLanguage', newLanguage);
+                    this.fetchContent();
+                }
+            }
+        }
+    </script>
+    <button @click="window.scrollTo({top: 0})" @scroll.window="showScrollTop = window.pageYOffset > 500"
+        x-data="{ showScrollTop: false }" x-show="showScrollTop" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-10"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 transform translate-y-0"
+        x-transition:leave-end="opacity-0 transform translate-y-10"
+        class="fixed bottom-8 right-8 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-4 shadow-lg cursor-pointer transition-all duration-300 hover:scale-110 z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+
+        <script>
+            // Check if user has disabled the donation banner
+            const showDonationBanner = localStorage.getItem('showDonationBanner') !== 'false';
+            const banner = document.getElementById('donationBanner');
+
+            if (!showDonationBanner && banner) {
+                banner.style.display = 'none';
+            }
+
+            const closeBannerButton = document.getElementById('closeBanner');
+            if (closeBannerButton) {
+                closeBannerButton.addEventListener('click', function () {
+                    if (banner) {
+                        banner.style.display = 'none';
+                    }
+                });
+            }
+        </script>
+        <script>
+            document.querySelector('.search-container input').addEventListener('mousemove', (e) => {
+                const container = e.target.parentElement;
+                const rect = container.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) * 100) / rect.width;
+                const y = ((e.clientY - rect.top) * 100) / rect.height;
+                container.style.setProperty('--mouse-x', x + '%');
+                container.style.setProperty('--mouse-y', y + '%');
+            });
+        </script>
+        <script>
+            window.addEventListener('appearance-changed', () => {
+                const particlesEl = document.getElementById('particles-js');
+                if (localStorage.getItem('appearance') === 'stars') {
+                    if (particlesEl) particlesEl.style.display = 'block';
+                } else {
+                    if (particlesEl) particlesEl.style.display = 'none';
+                }
+            });
+        </script>
+    </script>
+    <!-- Firebase Live User Counter -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, onDisconnect, serverTimestamp, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDgF08LZvMHaxQBuhZ_eP-qxExOuugYumQ",
+            authDomain: "arcturus-f83db.firebaseapp.com",
+            databaseURL: "https://arcturus-f83db-default-rtdb.firebaseio.com",
+            projectId: "arcturus-f83db",
+            storageBucket: "arcturus-f83db.firebasestorage.app",
+            messagingSenderId: "81903493189",
+            appId: "1:81903493189:web:eeee9f709f3fd2f05bc32c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Create a unique session for this user
+        const sessionsRef = ref(db, 'sessions');
+        const mySessionRef = push(sessionsRef);
+
+        // Write session with timestamp
+        set(mySessionRef, { online: true, timestamp: serverTimestamp() });
+
+        // Auto-remove when user leaves
+        onDisconnect(mySessionRef).remove();
+
+        // Watch total count in real time
+        onValue(sessionsRef, (snapshot) => {
+            const count = snapshot.size || 0;
+            const el = document.getElementById('live-user-count');
+            if (el) el.textContent = count.toLocaleString();
+        });
+    </script>
+</body>
+</html>
