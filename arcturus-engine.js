@@ -66,10 +66,25 @@ const ArcturusEngine = (() => {
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // Sources known to work best for casting workflows in this app.
     const CAST_CAPABLE = new Set([
-        'vidfast', 'videasy', 'vidzee', 'pstream',
+        // NOTE: videasy intentionally excluded based on runtime cast failures.
+        'vidfast', 'vidzee', 'pstream',
         'embedsu', 'vidsrcXyz', 'vidsrcrip',
         'vidsrcsu', 'vidsrcvip', 'vidsrccx',
     ]);
+
+    // Higher number = prefer first when casting mode is ON.
+    // Prioritize known working vidsrc variants for casting reliability.
+    const CAST_PRIORITY = {
+        vidsrcsu: 100,
+        vidsrcvip: 99,
+        vidsrcrip: 98,
+        vidsrcXyz: 97,
+        vidsrccx: 96,
+        pstream: 90,
+        vidfast: 88,
+        embedsu: 84,
+        vidzee: 80,
+    };
 
     // ── Quality baseline ──────────────────────────────────────────────────────
     const FALLBACK_Q = {
@@ -391,7 +406,14 @@ const ArcturusEngine = (() => {
 
             // Casting filter
             if (_castingMode) {
-                const castOnly = ranked.filter(r => r.castCapable);
+                const castOnly = ranked
+                    .filter(r => r.castCapable)
+                    .sort((a, b) => {
+                        const pa = CAST_PRIORITY[a.source.id] ?? 0;
+                        const pb = CAST_PRIORITY[b.source.id] ?? 0;
+                        if (pb !== pa) return pb - pa;
+                        return b.score - a.score;
+                    });
                 if (castOnly.length > 0) {
                     console.log(`[Arcturus] Casting mode: ${castOnly.length} compatible sources`);
                     ranked = castOnly;
@@ -450,7 +472,14 @@ const ArcturusEngine = (() => {
 
             if (enabled) {
                 // Re-filter current ranked list
-                const castOnly = _ranked.filter(r => r.castCapable);
+                const castOnly = _ranked
+                    .filter(r => r.castCapable)
+                    .sort((a, b) => {
+                        const pa = CAST_PRIORITY[a.source.id] ?? 0;
+                        const pb = CAST_PRIORITY[b.source.id] ?? 0;
+                        if (pb !== pa) return pb - pa;
+                        return b.score - a.score;
+                    });
                 if (castOnly.length > 0) {
                     _ranked    = castOnly;
                     _activeIdx = 0;
