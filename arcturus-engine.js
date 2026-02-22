@@ -61,6 +61,7 @@ const ArcturusEngine = (() => {
     const QUALITY_URL    = './quality-data.json';
     const TIMEOUT_MS     = 3000;
     const PRELOAD_COUNT  = 3;
+    const STRICT_CASTING = true;
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // These sources support direct HLS/MP4 stream extraction so
@@ -394,7 +395,7 @@ const ArcturusEngine = (() => {
                 } else {
                     console.warn('[Arcturus] No cast-compatible sources available');
                     if (_onNoCastSource) _onNoCastSource(ranked[0] || null);
-                    // keep all sources as fallback
+                    if (STRICT_CASTING) ranked = [];
                 }
             }
 
@@ -454,6 +455,11 @@ const ArcturusEngine = (() => {
                     if (_onSourceChange) _onSourceChange(_ranked[0].url, _ranked[0].source.id, _ranked[0]);
                 } else {
                     if (_onNoCastSource) _onNoCastSource(_ranked[0] || null);
+                    if (STRICT_CASTING) {
+                        _ranked = [];
+                        _activeIdx = 0;
+                        playerEl.innerHTML = `<div class="absolute inset-0 flex items-center justify-center bg-gray-900 text-white text-center p-4">No cast-compatible source available for this title.</div>`;
+                    }
                 }
             }
             // When turning OFF: full re-init is handled by caller via refresh()
