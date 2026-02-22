@@ -331,7 +331,7 @@ const ArcturusEngine = (() => {
         const n = _ranked[_activeIdx];
         console.log(`[Arcturus] Failover → ${n.source.id} (${n.score})`);
         loadIntoPlayer(n.url, playerEl);
-        if (_onSourceChange) _onSourceChange(n.url, 'arcturusapi');
+        if (_onSourceChange) _onSourceChange(n.url, n.source.id, n);
     }
 
     function loadIntoPlayer(url, playerEl) {
@@ -428,6 +428,7 @@ const ArcturusEngine = (() => {
             const best = _ranked[0];
             console.log(`[Arcturus] Playing: ${best.source.id} (score:${best.score}${best.castCapable ? ' 📡' : ''})`);
             loadIntoPlayer(best.url, playerEl);
+            if (_onSourceChange) _onSourceChange(best.url, best.source.id, best);
         },
 
         /** failover() — manually trigger switch to next source */
@@ -450,6 +451,7 @@ const ArcturusEngine = (() => {
                     _ranked    = castOnly;
                     _activeIdx = 0;
                     loadIntoPlayer(_ranked[0].url, playerEl);
+                    if (_onSourceChange) _onSourceChange(_ranked[0].url, _ranked[0].source.id, _ranked[0]);
                 } else {
                     if (_onNoCastSource) _onNoCastSource(_ranked[0] || null);
                 }
