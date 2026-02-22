@@ -539,9 +539,10 @@
                             <h3 class="text-lg md:text-xl font-semibold">Stream</h3>
                         </div>
                         <div class="space-y-3 md:space-y-4">
-                            <!-- Arcturus API single button -->
+
+                            <!-- Arcturus API button + status -->
                             <div class="flex flex-wrap gap-2 items-center">
-                                <button class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base bg-purple-600 text-white flex items-center gap-2">
+                                <button class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-sm md:text-base bg-purple-600 text-white flex items-center gap-2">
                                     <span class="relative flex h-2 w-2">
                                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-300 opacity-75"></span>
                                         <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -557,14 +558,53 @@
                                     Scanning sources...
                                 </span>
                             </div>
-                            <!-- Auto Crop toggle -->
-                            <div class="flex items-center gap-3 pt-1">
-                                <button @click="toggleAutoCrop()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300" :class="autoCropOn ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
-                                    Auto Crop <span x-text="autoCropOn ? 'ON' : 'OFF'" class="font-bold"></span>
-                                </button>
-                                <span class="text-xs text-gray-500">Removes black bars automatically</span>
+
+                            <!-- Toggle buttons row -->
+                            <div class="flex flex-wrap gap-2 pt-1">
+
+                                <!-- Cast-Compatible Sources toggle -->
+                                <div class="flex flex-col gap-1">
+                                    <button @click="toggleCastingMode()"
+                                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300"
+                                        :class="castingModeOn ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z"/>
+                                        </svg>
+                                        Prefer Cast Sources
+                                        <span x-text="castingModeOn ? 'ON' : 'OFF'" class="font-bold"></span>
+                                    </button>
+                                </div>
+
+                                <!-- Auto Crop toggle -->
+                                <div class="flex flex-col gap-1">
+                                    <button @click="toggleAutoCrop()"
+                                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300"
+                                        :class="autoCropOn ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                        </svg>
+                                        Auto Crop
+                                        <span x-text="autoCropOn ? 'ON' : 'OFF'" class="font-bold"></span>
+                                    </button>
+                                </div>
                             </div>
+
+                            <!-- No cast source alert -->
+                            <div x-show="noCastSourceAlert"
+                                 class="flex items-start gap-3 bg-yellow-900/40 border border-yellow-600/50 rounded-lg p-3 text-xs text-yellow-300">
+                                <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <div>
+                                    <p class="font-semibold">No cast-compatible source available for this title.</p>
+                                    <p class="mt-0.5 text-yellow-400">Arcturus is using the fastest available source instead
+                                        <span x-show="noCastFallbackName" x-text="'(' + noCastFallbackName + ')'"></span>.
+                                        Cast support may be limited.
+                                    </p>
+                                    <button @click="noCastSourceAlert = false" class="mt-1 underline text-yellow-500 hover:text-yellow-300">Dismiss</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -1215,6 +1255,9 @@
                 arcturusReady: false,
                 arcturusStatusText: '',
                 autoCropOn: localStorage.getItem('arcturusAutoCrop') !== 'false',
+                castingModeOn: localStorage.getItem('arcturusCasting') === 'true',
+                noCastSourceAlert: false,
+                noCastFallbackName: '',
                 availableSources: availableSources,
                 currentVideoUrl: '',
                 watchLaterItems: [],
@@ -1292,16 +1335,33 @@
                         }
 
                         ArcturusEngine.init({
-                            sources:     ARCTURUS_SOURCES,
-                            contentId:   this.contentId,
-                            contentType: this.contentType,
+                            sources:      ARCTURUS_SOURCES,
+                            contentId:    this.contentId,
+                            contentType:  this.contentType,
                             tvParams,
+                            castingMode:  this.castingModeOn,
+                            // Pass content aspect ratio so crop math is exact.
+                            // TMDB provides aspect_ratio on movie details.
+                            // TV shows default to 16:9 (1.778) inside the engine.
+                            contentRatio: this.content?.belongs_to_collection !== undefined
+                                ? null   // will be set after content loads via setContentRatio
+                                : null,
+                            onNoCastSource: (fallback) => {
+                                this.noCastSourceAlert   = true;
+                                this.noCastFallbackName  = fallback?.source?.id || '';
+                            },
                             onReady: (ranked) => {
                                 this.arcturusReady = true;
-                                const top = ranked[0];
-                                const verified = top?.verified ? '✓ verified' : 'unverified';
-                                this.arcturusStatusText = `${ranked.length} sources ranked — best: ${top?.score ?? '?'}/100 (${verified})`;
-                                // NOW load the best source — ranking is complete
+                                const top      = ranked[0];
+                                const castCount = ranked.filter(r => r.castCapable).length;
+                                const verified  = top?.verified ? '✓' : '';
+                                this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
+                                // Push content ratio to engine once content is loaded
+                                if (this.content) {
+                                    const ar = this.content.video_formats?.[0]?.aspect_ratio
+                                            || (this.contentType === 'movie' ? 2.39 : 1.778);
+                                    ArcturusEngine.setContentRatio(ar);
+                                }
                                 this.updateVideoUrl();
                             }
                         });
@@ -1332,6 +1392,17 @@
                         } else {
                             document.title = `${title} - Arcturus`;
                         }
+
+                        // Push real content aspect ratio to engine for accurate crop.
+                        // Movies: use TMDB's aspect_ratio if available, else 2.39 default.
+                        // TV shows: 16:9 (1.778) in virtually all cases.
+                        const contentAR = this.contentType === 'movie'
+                            ? (parseFloat(data.video_formats?.[0]?.aspect_ratio) || 2.39)
+                            : 1.778;
+                        ArcturusEngine.setContentRatio(
+                            contentAR,
+                            document.getElementById('player-container')
+                        );
                         
                         const imagesUrl = `${baseUrl}/${this.contentType}/${this.contentId}/images?api_key=${this.apiKey}&language=${language}`;
                         const imagesResponse = await fetch(imagesUrl);
@@ -1663,7 +1734,29 @@
                     this.autoCropOn = !this.autoCropOn;
                     localStorage.setItem('arcturusAutoCrop', this.autoCropOn);
                     const playerContainer = document.getElementById('player-container');
-                    ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer);
+                    const ar = this.contentType === 'movie' ? 2.39 : 1.778;
+                    ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer, ar);
+                },
+
+                toggleCastingMode() {
+                    this.castingModeOn      = !this.castingModeOn;
+                    this.noCastSourceAlert  = false;
+                    this.noCastFallbackName = '';
+                    localStorage.setItem('arcturusCasting', this.castingModeOn);
+
+                    const playerContainer = document.getElementById('player-container');
+
+                    if (this.castingModeOn) {
+                        // Apply cast filter to current ranked list immediately
+                        ArcturusEngine.setCastingMode(true, playerContainer, (fallback) => {
+                            this.noCastSourceAlert  = true;
+                            this.noCastFallbackName = fallback?.source?.id || '';
+                        });
+                    } else {
+                        // Turning off: re-init with all sources
+                        ArcturusEngine.setCastingMode(false, null);
+                        this.refreshArcturusForEpisode();
+                    }
                 },
 
                 async refreshArcturusForEpisode() {
@@ -1688,16 +1781,22 @@
                     }
 
                     await ArcturusEngine.refresh({
-                        sources:     ARCTURUS_SOURCES,
-                        contentId:   this.contentId,
-                        contentType: this.contentType,
-                        tvParams:    { season: this.selectedSeason, episode: this.selectedEpisode },
+                        sources:      ARCTURUS_SOURCES,
+                        contentId:    this.contentId,
+                        contentType:  this.contentType,
+                        tvParams:     { season: this.selectedSeason, episode: this.selectedEpisode },
+                        castingMode:  this.castingModeOn,
+                        onNoCastSource: (fallback) => {
+                            this.noCastSourceAlert  = true;
+                            this.noCastFallbackName = fallback?.source?.id || '';
+                        },
                         onReady: (ranked) => {
                             this.arcturusReady = true;
-                            const top = ranked[0];
-                            const verified = top?.verified ? 'verified' : 'unverified';
-                            this.arcturusStatusText = `${ranked.length} sources ranked — best: ${top?.score ?? '?'}/100 (${verified})`;
-                            // Load player AFTER ranking is complete
+                            const top      = ranked[0];
+                            const castCount = ranked.filter(r => r.castCapable).length;
+                            const verified  = top?.verified ? '✓' : '';
+                            this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
+                            ArcturusEngine.setContentRatio(this.contentType === 'movie' ? 2.39 : 1.778);
                             this.updateVideoUrl();
                         }
                     });
