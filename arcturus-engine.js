@@ -61,7 +61,7 @@ const ArcturusEngine = (() => {
     const QUALITY_URL    = './quality-data.json';
     const TIMEOUT_MS     = 3000;
     const PRELOAD_COUNT  = 3;
-    const STRICT_CASTING = true;
+    const STRICT_CASTING = false;
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // These sources support direct HLS/MP4 stream extraction so
