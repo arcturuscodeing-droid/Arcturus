@@ -66,24 +66,14 @@ const ArcturusEngine = (() => {
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // Sources known to work best for casting workflows in this app.
     const CAST_CAPABLE = new Set([
-        // NOTE: videasy intentionally excluded based on runtime cast failures.
-        'vidfast', 'vidzee', 'pstream',
-        'embedsu', 'vidsrcXyz', 'vidsrcrip',
-        'vidsrcsu', 'vidsrcvip', 'vidsrccx',
+        // Force cast mode to use VidFast only.
+        'vidfast',
     ]);
 
     // Higher number = prefer first when casting mode is ON.
     // Prioritize known working vidsrc variants for casting reliability.
     const CAST_PRIORITY = {
-        vidsrcsu: 100,
-        vidsrcvip: 99,
-        vidsrcrip: 98,
-        vidsrcXyz: 97,
-        vidsrccx: 96,
-        pstream: 90,
-        vidfast: 88,
-        embedsu: 84,
-        vidzee: 80,
+        vidfast: 100,
     };
 
     // ── Quality baseline ──────────────────────────────────────────────────────
