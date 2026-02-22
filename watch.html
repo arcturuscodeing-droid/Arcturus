@@ -14,26 +14,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Watch - Arcturus</title>
     <meta name="description" content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
-    <meta name="keywords" content="movies, tv shows, streaming, free movies, watch online, nova streaming">
+    <meta name="keywords" content="movies, tv shows, streaming, free movies, watch online, Arcturus streaming">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="ambrosial">
+    <meta name="author" content="Arcturus">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://novastream.top">
+    <meta property="og:url" content="https://Arcturusstream.top">
     <meta property="og:title" content="Arcturus">
     <meta property="og:description" content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
     <meta property="og:image:width" content="300">
     <meta property="og:image:height" content="300">
-    <meta property="og:image" content="https://raw.githubusercontent.com/ambr0sial/nova/main/logo.png">
+    <meta property="og:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:url" content="https://novastream.top">
+    <meta property="twitter:url" content="https://Arcturusstream.top">
     <meta property="twitter:title" content="Arcturus - Watch Movies & TV Shows">
     <meta property="twitter:description" content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
-    <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/nova/main/logo.png">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ambr0sial/nova/main/logo.png">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="sources.js"></script>
+    <script src="arcturus-engine.js"></script>
     <!-- Ad Blocker -->
     <script src="ad-blocker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -212,6 +213,13 @@
         [x-cloak] {
             display: none !important;
         }
+        /* ── Mobile fixes ── */
+        @media (max-width: 768px) {
+            body { overflow-x: hidden; }
+            .container { padding-left: 1rem; padding-right: 1rem; }
+            iframe { width: 100% !important; }
+            .flex.flex-wrap { gap: 0.5rem; }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen" x-data="app()">
@@ -223,7 +231,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-8">
                     <a href="/" class="flex items-center space-x-3">
-                        <img src="logo.png" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
+                        <img src="favicon.ico" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
                         <span class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800">Arcturus</span>
                     </a>
 
@@ -521,7 +529,7 @@
                         </div>
                     </template>
 
-                    <!-- source selector -->
+                    <!-- source selector — Arcturus API Engine -->
                     <div class="bg-gray-800 rounded-lg p-4 md:p-6">
                         <div class="flex items-center space-x-3 mb-3 md:mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -531,35 +539,31 @@
                             <h3 class="text-lg md:text-xl font-semibold">Stream</h3>
                         </div>
                         <div class="space-y-3 md:space-y-4">
-                            <div class="space-y-2">
-                                <h4 class="text-sm md:text-base text-gray-300 font-medium">English Sources:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <template x-for="source in availableSources" :key="source.id">
-                                        <template x-if="!source.isFrench">
-                                            <button 
-                                                @click="selectedSource = source.id; updateVideoUrl()"
-                                                class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base"
-                                                :class="selectedSource === source.id ? 'bg-purple-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
-                                                x-text="source.name">
-                                            </button>
-                                        </template>
-                                    </template>
-                                </div>
+                            <!-- Arcturus API single button -->
+                            <div class="flex flex-wrap gap-2 items-center">
+                                <button class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base bg-purple-600 text-white flex items-center gap-2">
+                                    <span class="relative flex h-2 w-2">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-300 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                                    </span>
+                                    Arcturus API
+                                </button>
+                                <span x-show="arcturusReady" class="text-xs text-green-400 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    <span x-text="arcturusStatusText"></span>
+                                </span>
+                                <span x-show="!arcturusReady" class="text-xs text-yellow-400 flex items-center gap-1">
+                                    <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                                    Scanning sources...
+                                </span>
                             </div>
-                            <div class="space-y-2">
-                                <h4 class="text-sm md:text-base text-gray-300 font-medium">French Sources:</h4>
-                                <div class="flex flex-wrap gap-2">
-                                    <template x-for="source in availableSources" :key="source.id">
-                                        <template x-if="source.isFrench">
-                                            <button 
-                                                @click="selectedSource = source.id; updateVideoUrl()"
-                                                class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base"
-                                                :class="selectedSource === source.id ? 'bg-purple-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
-                                                x-text="source.name">
-                                            </button>
-                                        </template>
-                                    </template>
-                                </div>
+                            <!-- Auto Crop toggle -->
+                            <div class="flex items-center gap-3 pt-1">
+                                <button @click="toggleAutoCrop()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300" :class="autoCropOn ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                                    Auto Crop <span x-text="autoCropOn ? 'ON' : 'OFF'" class="font-bold"></span>
+                                </button>
+                                <span class="text-xs text-gray-500">Removes black bars automatically</span>
                             </div>
                         </div>
                     </div>
@@ -935,7 +939,7 @@
                                         :alt="item.title || item.name"
                                         class="w-full h-full object-cover transition-all flex items-center justify-center"
                                         @error="event => {
-                                            event.target.src = '/logo.png';
+                                            event.target.src = '/favicon.ico';
                                             event.target.classList.remove('object-cover');
                                             event.target.classList.add('object-contain');
                                         }" />
@@ -1009,7 +1013,7 @@
                 Arcturus doesn't store files, but provides links to external services. Legal issues should be discussed with file providers and hosts. The files provided by video providers are not covered by Arcturus.
             </p>
             <p class="mt-2 text-xs">
-                Made with ❤ by Ambrosial. 17/03/25
+                Made with ❤ by Arcturus.
             </p>
             <p class="mt-2 text-xs">
                 <a href="/cdn-cgi/l/email-protection#dbb8b4b5afbab8aff5b5b4adbaa8afa9bebab69bbcb6bab2b7f5b8b4b6" class="text-purple-400 hover:text-purple-300 transition-colors"><span class="__cf_email__" data-cfemail="a3c0cccdd7c2c0d78dcdccd5c2d0d7d1c6c2cee3c4cec2cacf8dc0ccce">[email&#160;protected]</span></a>
@@ -1207,7 +1211,10 @@
                 selectedEpisode: 1,
                 seasons: [],
                 episodes: [],
-                selectedSource: localStorage.getItem('defaultSource') || 'arcturusapi',
+                selectedSource: 'arcturusapi',
+                arcturusReady: false,
+                arcturusStatusText: '',
+                autoCropOn: localStorage.getItem('arcturusAutoCrop') !== 'false',
                 availableSources: availableSources,
                 currentVideoUrl: '',
                 watchLaterItems: [],
@@ -1259,8 +1266,46 @@
 
                     if (this.contentId && this.contentType) {
                         await this.fetchContent();
-                        this.updateVideoUrl();
                         this.fetchTorrentInfo();
+
+                        // ── Arcturus Engine init ──────────────────────────────
+                        // Start silently testing & preloading all sources now,
+                        // so by the time the user hits Play everything is ready.
+                        const tvParams = this.isShow
+                            ? { season: this.selectedSeason, episode: this.selectedEpisode }
+                            : {};
+
+                        // Show a subtle loading state in the player while engine ranks sources
+                        const _arcPlayerEl = document.getElementById('player-container');
+                        if (_arcPlayerEl) {
+                            _arcPlayerEl.innerHTML = `
+                                <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 gap-3">
+                                    <div class="flex items-center gap-3 text-purple-400">
+                                        <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                        </svg>
+                                        <span class="text-white font-medium">Arcturus API — Finding best source…</span>
+                                    </div>
+                                    <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
+                                </div>`;
+                        }
+
+                        ArcturusEngine.init({
+                            sources:     ARCTURUS_SOURCES,
+                            contentId:   this.contentId,
+                            contentType: this.contentType,
+                            tvParams,
+                            onReady: (ranked) => {
+                                this.arcturusReady = true;
+                                const top = ranked[0];
+                                const verified = top?.verified ? '✓ verified' : 'unverified';
+                                this.arcturusStatusText = `${ranked.length} sources ranked — best: ${top?.score ?? '?'}/100 (${verified})`;
+                                // NOW load the best source — ranking is complete
+                                this.updateVideoUrl();
+                            }
+                        });
+                        // ─────────────────────────────────────────────────────
                     }
                     
                     // Start tracking video progress
@@ -1411,6 +1456,15 @@
                 },
 
                 tryNextSource() {
+                    // If Arcturus engine is active, delegate failover to it
+                    if (this.selectedSource === 'arcturusapi') {
+                        const playerContainer = document.getElementById('player-container');
+                        if (playerContainer) {
+                            ArcturusEngine.failover(playerContainer);
+                        }
+                        return;
+                    }
+
                     const currentIndex = this.availableSources.findIndex(s => s.id === this.selectedSource);
                     if (currentIndex === -1) return;
 
@@ -1448,6 +1502,21 @@
                     const params = this.isShow
                         ? { id: this.contentId, season: this.selectedSeason, episode: this.selectedEpisode }
                         : { id: this.contentId };
+
+                    // ── Arcturus Engine: route arcturusapi through the smart engine ──
+                    if (source._engine) {
+                        const playerContainer = document.getElementById('player-container');
+                        if (!playerContainer) return;
+
+                        ArcturusEngine.play(playerContainer, (url, id) => {
+                            this.currentVideoUrl = url;
+                        });
+
+                        // Apply user's saved auto-crop preference
+                        ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer);
+                        return;
+                    }
+                    // ────────────────────────────────────────────────────────────────
 
                     if (source.isApiResponse) {
                         const apiUrl = this.getSourceUrl(
@@ -1589,6 +1658,52 @@
                     }
                 },
 
+                // ── Arcturus Engine helper methods ────────────────────────
+                toggleAutoCrop() {
+                    this.autoCropOn = !this.autoCropOn;
+                    localStorage.setItem('arcturusAutoCrop', this.autoCropOn);
+                    const playerContainer = document.getElementById('player-container');
+                    ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer);
+                },
+
+                async refreshArcturusForEpisode() {
+                    // Called when user changes season/episode on a TV show
+                    if (this.selectedSource !== 'arcturusapi') return;
+                    this.arcturusReady = false;
+
+                    // Show loading state while re-ranking
+                    const _arcPlayerEl = document.getElementById('player-container');
+                    if (_arcPlayerEl) {
+                        _arcPlayerEl.innerHTML = `
+                            <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 gap-3">
+                                <div class="flex items-center gap-3 text-purple-400">
+                                    <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                    </svg>
+                                    <span class="text-white font-medium">Arcturus API — Finding best source…</span>
+                                </div>
+                                <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
+                            </div>`;
+                    }
+
+                    await ArcturusEngine.refresh({
+                        sources:     ARCTURUS_SOURCES,
+                        contentId:   this.contentId,
+                        contentType: this.contentType,
+                        tvParams:    { season: this.selectedSeason, episode: this.selectedEpisode },
+                        onReady: (ranked) => {
+                            this.arcturusReady = true;
+                            const top = ranked[0];
+                            const verified = top?.verified ? 'verified' : 'unverified';
+                            this.arcturusStatusText = `${ranked.length} sources ranked — best: ${top?.score ?? '?'}/100 (${verified})`;
+                            // Load player AFTER ranking is complete
+                            this.updateVideoUrl();
+                        }
+                    });
+                },
+                // ─────────────────────────────────────────────────────────────
+
                 getSourceUrl(sourceId, type, params) {
                     const source = this.availableSources.find(s => s.id === sourceId);
                     if (!source) return '';
@@ -1625,7 +1740,12 @@
                 },
 
                 loadEpisode() {
-                    this.updateVideoUrl();
+                    // Re-run Arcturus engine for the new episode, then load
+                    if (this.selectedSource === 'arcturusapi') {
+                        this.refreshArcturusForEpisode();
+                    } else {
+                        this.updateVideoUrl();
+                    }
                 },
 
                 sections: {
@@ -2049,6 +2169,10 @@
             const el = document.getElementById('live-user-count');
             if (el) el.textContent = count.toLocaleString();
         });
+    </script>
+    <script>
+        // Clean up Arcturus preload iframes when user navigates away
+        window.addEventListener('beforeunload', () => ArcturusEngine.destroy());
     </script>
 </body>
 </html>
