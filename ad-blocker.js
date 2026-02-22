@@ -57,7 +57,7 @@
 
   // ── Blocked domains & patterns ────────────────────────────────
   const blockedDomains = [
-    'all', 'googleadservices.com', 'golchhait.com',
+    'googleadservices.com', 'golchhait.com',
     'doubleclick.net', 'googlesyndication.com', 'google-analytics.com',
     'googletagmanager.com', 'facebook.net', 'connect.facebook.net',
     'adservice.google.com', 'pagead2.googlesyndication.com',
@@ -72,12 +72,12 @@
     'popads.net', 'popcash.net', 'propellerads.com', 'adcash.com',
     'exoclick.com', 'juicyads.com', 'trafficjunky.com', 'plugrush.com',
     'adsterra.com', 'hilltopads.net', 'clickadu.com', 'bidvertiser.com',
-    'revcontent.com', 'mgid.com', 'zeroredirect', 'redirect',
+    'revcontent.com', 'mgid.com', 'zeroredirect1.com', 'zeroredirect2.com',
     'popunder', 'pop-under', 'playerhq',
     'playeverlustinglife.space', 'evshobbiesusa.com',
     'a46e0368.forwarding-request-consent.pages.dev',
     'mod-lighting.com', 'greatbharatspares.com', 'gotlaptopparts.com',
-    'fmshobby.com', 'awin1.com', 'amazon.com',
+    'fmshobby.com', 'awin1.com', 'amazon-adsystem.com',
     'adserver.', 'zoneid', 'bannerid', 'campaignid', 'click_id',
     'c4thl3k.php', 'adformat=onclick', 'adformat=onmouseover',
     'adformat=onfocus', 'adformat=onblur', 'adformat=onload',
@@ -481,7 +481,10 @@
     const _fetch = window.fetch
     window.fetch = function(url, options) {
       const urlStr = typeof url === 'string' ? url : url?.url
-      if (urlStr && !isAllowed(urlStr)) {
+      // Whitelist always wins — never block whitelisted or same-origin requests
+      if (!urlStr || isAllowed(urlStr)) return _fetch.apply(this, arguments)
+      // Only block if explicitly on the blocked list (isBlocked checks patterns)
+      if (isBlocked(urlStr)) {
         console.log('[Arcturus AdBlock] Blocked fetch:', urlStr)
         return Promise.reject(new Error('Blocked by Arcturus AdBlock'))
       }
@@ -490,7 +493,8 @@
 
     const _xhrOpen = XMLHttpRequest.prototype.open
     XMLHttpRequest.prototype.open = function(method, url) {
-      if (url && !isAllowed(url)) {
+      if (!url || isAllowed(url)) return _xhrOpen.apply(this, arguments)
+      if (isBlocked(url)) {
         console.log('[Arcturus AdBlock] Blocked XHR:', url)
         throw new Error('Blocked by Arcturus AdBlock')
       }
