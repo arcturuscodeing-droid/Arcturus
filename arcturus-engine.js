@@ -59,9 +59,9 @@ const ArcturusEngine = (() => {
     let _contentRatio    = null;   // set by caller from TMDB data
 
     const QUALITY_URL    = './quality-data.json';
-    const TIMEOUT_MS     = 3000;
+    const TIMEOUT_MS     = 7000;
     const PRELOAD_COUNT  = 3;
-    const STRICT_CASTING = true;
+    const STRICT_CASTING = false;
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // Sources known to work best for casting workflows in this app.
