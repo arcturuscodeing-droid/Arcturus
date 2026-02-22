@@ -62,6 +62,7 @@ const ArcturusEngine = (() => {
     const TIMEOUT_MS     = 7000;
     const PRELOAD_COUNT  = 3;
     const STRICT_CASTING = false;
+    const CAST_FORCE_SOURCE = 'vidfast';
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // Sources known to work best for casting workflows in this app.
@@ -309,6 +310,23 @@ const ArcturusEngine = (() => {
             .sort((a, b) => b.score - a.score);
     }
 
+    function selectCastingCandidates(ranked) {
+        const castOnly = ranked
+            .filter(r => r.castCapable)
+            .sort((a, b) => {
+                const pa = CAST_PRIORITY[a.source.id] ?? 0;
+                const pb = CAST_PRIORITY[b.source.id] ?? 0;
+                if (pb !== pa) return pb - pa;
+                return b.score - a.score;
+            });
+
+        if (castOnly.length === 0) return castOnly;
+
+        // If forced source exists, pin cast mode to that source only.
+        const forced = castOnly.find(r => r.source.id === CAST_FORCE_SOURCE);
+        return forced ? [forced] : castOnly;
+    }
+
     // ── Preloading ────────────────────────────────────────────────────────────
     function clearPreloads() {
         _preloads.forEach(f => f.parentNode?.removeChild(f));
@@ -396,14 +414,7 @@ const ArcturusEngine = (() => {
 
             // Casting filter
             if (_castingMode) {
-                const castOnly = ranked
-                    .filter(r => r.castCapable)
-                    .sort((a, b) => {
-                        const pa = CAST_PRIORITY[a.source.id] ?? 0;
-                        const pb = CAST_PRIORITY[b.source.id] ?? 0;
-                        if (pb !== pa) return pb - pa;
-                        return b.score - a.score;
-                    });
+                const castOnly = selectCastingCandidates(ranked);
                 if (castOnly.length > 0) {
                     console.log(`[Arcturus] Casting mode: ${castOnly.length} compatible sources`);
                     ranked = castOnly;
@@ -462,14 +473,7 @@ const ArcturusEngine = (() => {
 
             if (enabled) {
                 // Re-filter current ranked list
-                const castOnly = _ranked
-                    .filter(r => r.castCapable)
-                    .sort((a, b) => {
-                        const pa = CAST_PRIORITY[a.source.id] ?? 0;
-                        const pb = CAST_PRIORITY[b.source.id] ?? 0;
-                        if (pb !== pa) return pb - pa;
-                        return b.score - a.score;
-                    });
+                const castOnly = selectCastingCandidates(_ranked);
                 if (castOnly.length > 0) {
                     _ranked    = castOnly;
                     _activeIdx = 0;
