@@ -29,7 +29,7 @@
     <meta property="twitter:description"
         content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
     <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
@@ -375,6 +375,23 @@
         .scrollbar-purple::-webkit-scrollbar-thumb:hover {
             background: #a855f7;
         }
+        /* ── Mobile fixes ── */
+        @media (max-width: 768px) {
+            body { overflow-x: hidden; }
+            .flex.gap-4.overflow-x-auto > a,
+            .flex.gap-4.overflow-x-auto > div { min-width: 120px; }
+            .flex.gap-4.overflow-x-auto,
+            .flex.overflow-x-auto { scrollbar-width: none; -ms-overflow-style: none; }
+            .flex.gap-4.overflow-x-auto::-webkit-scrollbar,
+            .flex.overflow-x-auto::-webkit-scrollbar { display: none; }
+            section, nav .container { padding-left: 1rem; padding-right: 1rem; }
+            footer { padding: 1rem; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .flex.gap-4.overflow-x-auto > a,
+            .flex.gap-4.overflow-x-auto > div { min-width: 100px; }
+            span.text-2xl { font-size: 1.25rem; }
+        }
     </style>
 </head>
 
@@ -390,7 +407,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4 md:space-x-8">
                     <div class="flex items-center space-x-3">
-                        <img src="logo.png" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
+                        <img src="favicon.ico" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
                         <span class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800">Arcturus</span>
                     </div>
 
@@ -414,7 +431,7 @@
                         <button @click="currentTab = currentTab === 'movies' ? 'shows' : 'movies'" class="nav-link">
                             <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
                         </button>
-                        <a href="livesports.html" class="nav-link">Live Sports</a>
+
                         <button @click="showWatchLater = true" class="nav-link flex items-center space-x-2">
                             <span>Watch Later</span>
                             <span x-show="watchLaterCount > 0"
@@ -469,8 +486,7 @@
                         class="text-left px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
                         <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
                     </button>
-                    <a href="livesports.html" class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Live
-                        Sports</a>
+
                     <button @click="showWatchLater = true; mobileMenu = false"
                         class="flex items-center justify-between px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
                         <span>Watch Later</span>
@@ -491,7 +507,7 @@
                     </a>
                     <a href="https://github.com/ambr0sial/Arcturus" target="_blank"
                         class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">GitHub</a>
-                    <a href="https://ko-fi.com/ambrosial" target="_blank"
+                    <a href="https://ko-fi.com/Arcturus" target="_blank"
                         class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Ko-Fi</a>
                     <a href="https://discord.gg/s9kUZw7CqP" target="_blank"
                         class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Discord</a>
@@ -610,7 +626,7 @@
                                              :alt="item.title || item.name"
                                              class="w-full h-full object-cover"
                                              @error="event => {
-                                                 event.target.src = '/logo.png';
+                                                 event.target.src = '/favicon.ico';
                                                  event.target.classList.remove('object-cover');
                                                  event.target.classList.add('object-contain');
                                              }">
@@ -676,7 +692,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -720,7 +736,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -749,7 +765,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -778,7 +794,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -807,7 +823,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -836,7 +852,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -865,7 +881,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -894,7 +910,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -923,7 +939,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -952,7 +968,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -981,7 +997,7 @@
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
-                                        @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                        @error="event => { event.target.src='/favicon.ico'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
                                         <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
@@ -1050,7 +1066,7 @@
                 file providers and hosts. The files provided by video providers are not covered by Arcturus.
             </p>
             <p class="mt-2 text-xs">
-                Made with ❤ by Ambrosial. 07/04/25
+                Made with ❤ by Arcturus.
             </p>
             <p class="mt-2 text-xs">
                 <a href="/cdn-cgi/l/email-protection#b5d6dadbc1d4d6c19bf4c7d6c1c0c7c0c6c6c1c7d0d4d8f5d2d8d4dcd99bd6dad8" class="text-purple-400 hover:text-purple-300 transition-colors"><span class="__cf_email__" data-cfemail="4c2f2322382d2f38620d3e2f38393e393f3f383e292d210c2b212d2520622f2321">[email&#160;protected]</span></a>
@@ -1363,35 +1379,6 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const discordPopupSeen = localStorage.getItem('discordPopupSeen');
-
-            if (!discordPopupSeen) {
-                const popup = document.createElement('div');
-                popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75';
-                popup.innerHTML = `
-                    <div class="bg-gray-800 rounded-lg p-6 text-center space-y-4 max-w-sm">
-                        <h2 class="text-xl font-bold text-purple-400">Arcturus has a Discord Server!</h2>
-                        <p class="text-gray-300">Join the community for updates and discussions <3</p>
-                        <a href="https://discord.gg/s9kUZw7CqP" target="_blank" 
-                            class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-white inline-block">
-                            Join Now
-                        </a>
-                        <button id="closePopup" 
-                            class="text-gray-500 hover:text-gray-300 focus:outline-none">
-                            Dismiss
-                        </button>
-                    </div>
-                `;
-                document.body.appendChild(popup);
-
-                document.getElementById('closePopup').addEventListener('click', function () {
-                    popup.style.display = 'none';
-                    localStorage.setItem('discordPopupSeen', 'true');
-                });
-            }
-        });
-
         document.addEventListener('alpine:init', () => {
             Alpine.store('contextMenu', {
                 show: false,

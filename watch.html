@@ -34,11 +34,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="sources.js"></script>
-    <script src="arcturus-engine.js"></script>
     <!-- Ad Blocker -->
     <script src="ad-blocker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -412,7 +410,7 @@
                                     </button>
                                     
                                     <!-- Chromecast Button -->
-                                    <button @click="startChromecast()" 
+                                    <button @click="showCastHelp()" 
                                             class="p-2 bg-gray-800 rounded-lg hover:bg-purple-600 transition-colors flex items-center gap-1"
                                             title="Cast to TV">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -530,7 +528,7 @@
                         </div>
                     </template>
 
-                    <!-- source selector — Arcturus API Engine -->
+                    <!-- source selector -->
                     <div class="bg-gray-800 rounded-lg p-4 md:p-6">
                         <div class="flex items-center space-x-3 mb-3 md:mb-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -540,72 +538,36 @@
                             <h3 class="text-lg md:text-xl font-semibold">Stream</h3>
                         </div>
                         <div class="space-y-3 md:space-y-4">
-
-                            <!-- Arcturus API button + status -->
-                            <div class="flex flex-wrap gap-2 items-center">
-                                <button class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-sm md:text-base bg-purple-600 text-white flex items-center gap-2">
-                                    <span class="relative flex h-2 w-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-300 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                                    </span>
-                                    Arcturus API
-                                </button>
-                                <span x-show="arcturusReady" class="text-xs text-green-400 flex items-center gap-1">
-                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    <span x-text="arcturusStatusText"></span>
-                                </span>
-                                <span x-show="!arcturusReady" class="text-xs text-yellow-400 flex items-center gap-1">
-                                    <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-                                    Scanning sources...
-                                </span>
-                            </div>
-
-                            <!-- Toggle buttons row -->
-                            <div class="flex flex-wrap gap-2 pt-1">
-
-                                <!-- Cast-Compatible Sources toggle -->
-                                <div class="flex flex-col gap-1">
-                                    <button @click="toggleCastingMode()"
-                                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300"
-                                        :class="castingModeOn ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
-                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M21 3H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11z"/>
-                                        </svg>
-                                        Prefer Cast Sources
-                                        <span x-text="castingModeOn ? 'ON' : 'OFF'" class="font-bold"></span>
-                                    </button>
-                                </div>
-
-                                <!-- Auto Crop toggle -->
-                                <div class="flex flex-col gap-1">
-                                    <button @click="toggleAutoCrop()"
-                                        class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all duration-300"
-                                        :class="autoCropOn ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
-                                        </svg>
-                                        Auto Crop
-                                        <span x-text="autoCropOn ? 'ON' : 'OFF'" class="font-bold"></span>
-                                    </button>
+                            <div class="space-y-2">
+                                <h4 class="text-sm md:text-base text-gray-300 font-medium">English Sources:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="source in availableSources" :key="source.id">
+                                        <template x-if="!source.isFrench">
+                                            <button 
+                                                @click="selectedSource = source.id; updateVideoUrl()"
+                                                class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base"
+                                                :class="selectedSource === source.id ? 'bg-purple-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
+                                                x-text="source.name">
+                                            </button>
+                                        </template>
+                                    </template>
                                 </div>
                             </div>
-
-                            <!-- No cast source alert -->
-                            <div x-show="noCastSourceAlert"
-                                 class="flex items-start gap-3 bg-yellow-900/40 border border-yellow-600/50 rounded-lg p-3 text-xs text-yellow-300">
-                                <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <div>
-                                    <p class="font-semibold">No cast-compatible source available for this title.</p>
-                                    <p class="mt-0.5 text-yellow-400">Arcturus is using the fastest available source instead
-                                        <span x-show="noCastFallbackName" x-text="'(' + noCastFallbackName + ')'"></span>.
-                                        Cast support may be limited.
-                                    </p>
-                                    <button @click="noCastSourceAlert = false" class="mt-1 underline text-yellow-500 hover:text-yellow-300">Dismiss</button>
+                            <div class="space-y-2">
+                                <h4 class="text-sm md:text-base text-gray-300 font-medium">French Sources:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="source in availableSources" :key="source.id">
+                                        <template x-if="source.isFrench">
+                                            <button 
+                                                @click="selectedSource = source.id; updateVideoUrl()"
+                                                class="px-3 md:px-4 py-1.5 md:py-2 rounded-lg transition-all duration-300 text-sm md:text-base"
+                                                :class="selectedSource === source.id ? 'bg-purple-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
+                                                x-text="source.name">
+                                            </button>
+                                        </template>
+                                    </template>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -1252,18 +1214,9 @@
                 selectedEpisode: 1,
                 seasons: [],
                 episodes: [],
-                selectedSource: 'arcturusapi',
-                arcturusReady: false,
-                arcturusStatusText: '',
-                autoCropOn: localStorage.getItem('arcturusAutoCrop') !== 'false',
-                castingModeOn: localStorage.getItem('arcturusCasting') === 'true',
-                noCastSourceAlert: false,
-                noCastFallbackName: '',
+                selectedSource: localStorage.getItem('defaultSource') || 'arcturusapi',
                 availableSources: availableSources,
                 currentVideoUrl: '',
-                currentVideoMimeType: '',
-                currentPlaybackType: 'embed',
-                activeEngineSourceId: '',
                 watchLaterItems: [],
                 watchLaterCount: 0,
                 showWatchLater: false,
@@ -1278,15 +1231,6 @@
                 chromecastAvailable: false,
                 isCasting: false,
                 castSession: null,
-                
-                // Continue watching tracking state
-                progressSaveInterval: null,
-                progressTrackingBound: false,
-                watchSessionUrl: '',
-                watchSessionBaseProgress: 0,
-                watchSessionStartedAt: 0,
-                inferredWatchedMs: 0,
-                inferredVisibleSince: 0,
 
                 async init() {
                     console.log('[Watch] Selected source:', this.selectedSource);
@@ -1322,63 +1266,8 @@
 
                     if (this.contentId && this.contentType) {
                         await this.fetchContent();
+                        this.updateVideoUrl();
                         this.fetchTorrentInfo();
-
-                        // ── Arcturus Engine init ──────────────────────────────
-                        // Start silently testing & preloading all sources now,
-                        // so by the time the user hits Play everything is ready.
-                        const tvParams = this.isShow
-                            ? { season: this.selectedSeason, episode: this.selectedEpisode }
-                            : {};
-
-                        // Show a subtle loading state in the player while engine ranks sources
-                        const _arcPlayerEl = document.getElementById('player-container');
-                        if (_arcPlayerEl) {
-                            _arcPlayerEl.innerHTML = `
-                                <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 gap-3">
-                                    <div class="flex items-center gap-3 text-purple-400">
-                                        <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                        </svg>
-                                        <span class="text-white font-medium">Arcturus API — Finding best source…</span>
-                                    </div>
-                                    <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
-                                </div>`;
-                        }
-
-                        ArcturusEngine.init({
-                            sources:      ARCTURUS_SOURCES,
-                            contentId:    this.contentId,
-                            contentType:  this.contentType,
-                            tvParams,
-                            castingMode:  this.castingModeOn,
-                            // Pass content aspect ratio so crop math is exact.
-                            // TMDB provides aspect_ratio on movie details.
-                            // TV shows default to 16:9 (1.778) inside the engine.
-                            contentRatio: this.content?.belongs_to_collection !== undefined
-                                ? null   // will be set after content loads via setContentRatio
-                                : null,
-                            onNoCastSource: (fallback) => {
-                                this.noCastSourceAlert   = true;
-                                this.noCastFallbackName  = fallback?.source?.id || '';
-                            },
-                            onReady: (ranked) => {
-                                this.arcturusReady = true;
-                                const top      = ranked[0];
-                                const castCount = ranked.filter(r => r.castCapable).length;
-                                const verified  = top?.verified ? '✓' : '';
-                                this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
-                                // Push content ratio to engine once content is loaded
-                                if (this.content) {
-                                    const ar = this.content.video_formats?.[0]?.aspect_ratio
-                                            || (this.contentType === 'movie' ? 2.39 : 1.778);
-                                    ArcturusEngine.setContentRatio(ar);
-                                }
-                                this.updateVideoUrl();
-                            }
-                        });
-                        // ─────────────────────────────────────────────────────
                     }
                     
                     // Start tracking video progress
@@ -1405,17 +1294,6 @@
                         } else {
                             document.title = `${title} - Arcturus`;
                         }
-
-                        // Push real content aspect ratio to engine for accurate crop.
-                        // Movies: use TMDB's aspect_ratio if available, else 2.39 default.
-                        // TV shows: 16:9 (1.778) in virtually all cases.
-                        const contentAR = this.contentType === 'movie'
-                            ? (parseFloat(data.video_formats?.[0]?.aspect_ratio) || 2.39)
-                            : 1.778;
-                        ArcturusEngine.setContentRatio(
-                            contentAR,
-                            document.getElementById('player-container')
-                        );
                         
                         const imagesUrl = `${baseUrl}/${this.contentType}/${this.contentId}/images?api_key=${this.apiKey}&language=${language}`;
                         const imagesResponse = await fetch(imagesUrl);
@@ -1540,15 +1418,6 @@
                 },
 
                 tryNextSource() {
-                    // If Arcturus engine is active, delegate failover to it
-                    if (this.selectedSource === 'arcturusapi') {
-                        const playerContainer = document.getElementById('player-container');
-                        if (playerContainer) {
-                            ArcturusEngine.failover(playerContainer);
-                        }
-                        return;
-                    }
-
                     const currentIndex = this.availableSources.findIndex(s => s.id === this.selectedSource);
                     if (currentIndex === -1) return;
 
@@ -1579,120 +1448,6 @@
                     }
                 },
 
-                setPlaybackMode({ url = '', mimeType = '', type = 'embed', engineSourceId = '' } = {}) {
-                    this.currentVideoUrl = url;
-                    this.currentVideoMimeType = mimeType;
-                    this.currentPlaybackType = type;
-                    this.activeEngineSourceId = engineSourceId;
-                    this.beginWatchSession(url);
-                },
-
-                getDirectCastMedia() {
-                    const videoElement = document.querySelector('#player-container video');
-                    const mediaUrl = videoElement?.currentSrc || videoElement?.src || this.currentVideoUrl;
-                    if (!mediaUrl || this.currentPlaybackType !== 'direct') return null;
-
-                    const mimeType = this.currentVideoMimeType
-                        || (mediaUrl.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4');
-                    return { mediaUrl, mimeType, videoElement };
-                },
-
-                getContinueWatchingList() {
-                    try {
-                        return JSON.parse(localStorage.getItem('continueWatching') || '[]');
-                    } catch {
-                        return [];
-                    }
-                },
-
-                getRuntimeMinutes() {
-                    const runtime = this.isShow
-                        ? (this.content?.episode_run_time?.[0] || 45)
-                        : (this.content?.runtime || 90);
-                    return Number.isFinite(runtime) && runtime > 0 ? runtime : 90;
-                },
-
-                clampProgress(value, max = 99) {
-                    if (!Number.isFinite(value)) return 0;
-                    return Math.max(0, Math.min(max, value));
-                },
-
-                formatTimeRemaining(runtimeMinutes, progress) {
-                    const safeProgress = this.clampProgress(progress, 99);
-                    const totalMinsRemaining = Math.max(1, Math.floor(runtimeMinutes * (100 - safeProgress) / 100));
-                    if (totalMinsRemaining >= 60) {
-                        const hrs = Math.floor(totalMinsRemaining / 60);
-                        const mins = totalMinsRemaining % 60;
-                        return mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
-                    }
-                    return `${totalMinsRemaining}m`;
-                },
-
-                updateInferredVisibility() {
-                    if (document.hidden) {
-                        if (this.inferredVisibleSince > 0) {
-                            this.inferredWatchedMs += Math.max(0, Date.now() - this.inferredVisibleSince);
-                            this.inferredVisibleSince = 0;
-                        }
-                        return;
-                    }
-
-                    if (this.inferredVisibleSince === 0) {
-                        this.inferredVisibleSince = Date.now();
-                    }
-                },
-
-                getInferredWatchedMs() {
-                    let watchedMs = this.inferredWatchedMs;
-                    if (!document.hidden && this.inferredVisibleSince > 0) {
-                        watchedMs += Math.max(0, Date.now() - this.inferredVisibleSince);
-                    }
-                    return watchedMs;
-                },
-
-                beginWatchSession(url = '') {
-                    if (!this.contentId) return;
-                    if (url && url === this.watchSessionUrl) return;
-
-                    const continueWatching = this.getContinueWatchingList();
-                    const existing = continueWatching.find(item => String(item.id) === String(this.contentId));
-
-                    let baseProgress = 0;
-                    if (existing) {
-                        const sameEpisode = !this.isShow ||
-                            (existing.season === this.selectedSeason && existing.episode === this.selectedEpisode);
-                        if (sameEpisode) {
-                            baseProgress = Number(existing.progress) || 0;
-                        }
-                    }
-
-                    const carriedProgress = this.watchSessionStartedAt
-                        ? this.getComputedProgress(this.getRuntimeMinutes())
-                        : 0;
-
-                    this.watchSessionUrl = url || this.currentVideoUrl || '';
-                    this.watchSessionBaseProgress = this.clampProgress(Math.max(baseProgress, carriedProgress), 95);
-                    this.watchSessionStartedAt = Date.now();
-                    this.inferredWatchedMs = 0;
-                    this.inferredVisibleSince = document.hidden ? 0 : Date.now();
-                },
-
-                getComputedProgress(runtimeMinutes) {
-                    if (this.currentPlaybackType === 'direct') {
-                        const videoElement = document.querySelector('#player-container video');
-                        const duration = Number(videoElement?.duration);
-                        const currentTime = Number(videoElement?.currentTime);
-                        if (Number.isFinite(duration) && duration > 0 && Number.isFinite(currentTime) && currentTime >= 0) {
-                            return this.clampProgress((currentTime / duration) * 100, 99);
-                        }
-                    }
-
-                    const inferredMins = this.getInferredWatchedMs() / 60000;
-                    const inferredDeltaPct = (inferredMins / runtimeMinutes) * 100;
-                    const inferredProgress = this.watchSessionBaseProgress + inferredDeltaPct;
-                    return this.clampProgress(inferredProgress, 95);
-                },
-
                 updateVideoUrl() {
                     const source = this.availableSources.find(s => s.id === this.selectedSource);
                     if (!source) return;
@@ -1700,26 +1455,6 @@
                     const params = this.isShow
                         ? { id: this.contentId, season: this.selectedSeason, episode: this.selectedEpisode }
                         : { id: this.contentId };
-
-                    // ── Arcturus Engine: route arcturusapi through the smart engine ──
-                    if (source._engine) {
-                        const playerContainer = document.getElementById('player-container');
-                        if (!playerContainer) return;
-
-                        ArcturusEngine.play(playerContainer, (url, sourceId, sourceMeta) => {
-                            this.setPlaybackMode({
-                                url,
-                                mimeType: '',
-                                type: 'embed',
-                                engineSourceId: sourceMeta?.source?.id || sourceId || ''
-                            });
-                        });
-
-                        // Apply user's saved auto-crop preference
-                        ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer);
-                        return;
-                    }
-                    // ────────────────────────────────────────────────────────────────
 
                     if (source.isApiResponse) {
                         const apiUrl = this.getSourceUrl(
@@ -1748,12 +1483,7 @@
                                     const firstSource = data.data.items[0];
                                     
                                     if (firstSource.type === 'file' || firstSource.type === 'hls') {
-                                        this.setPlaybackMode({
-                                            url: firstSource.url,
-                                            mimeType: firstSource.type === 'hls' ? 'application/x-mpegURL' : 'video/mp4',
-                                            type: 'direct',
-                                            engineSourceId: ''
-                                        });
+                                        this.currentVideoUrl = firstSource.url;
                                         
                                         this.$nextTick(() => {
                                             const video = document.createElement('video');
@@ -1843,12 +1573,7 @@
                         );
 
                         if (newUrl !== this.currentVideoUrl) {
-                            this.setPlaybackMode({
-                                url: newUrl,
-                                mimeType: '',
-                                type: 'embed',
-                                engineSourceId: ''
-                            });
+                            this.currentVideoUrl = newUrl;
                             
                             this.$nextTick(() => {
                                 const playerContainer = document.getElementById('player-container');
@@ -1870,89 +1595,6 @@
                         }
                     }
                 },
-
-                // ── Arcturus Engine helper methods ────────────────────────
-                toggleAutoCrop() {
-                    this.autoCropOn = !this.autoCropOn;
-                    localStorage.setItem('arcturusAutoCrop', this.autoCropOn);
-                    const playerContainer = document.getElementById('player-container');
-                    const ar = this.contentType === 'movie' ? 2.39 : 1.778;
-                    ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer, ar);
-                },
-
-                toggleCastingMode() {
-                    this.castingModeOn      = !this.castingModeOn;
-                    this.noCastSourceAlert  = false;
-                    this.noCastFallbackName = '';
-                    localStorage.setItem('arcturusCasting', this.castingModeOn);
-
-                    const playerContainer = document.getElementById('player-container');
-
-                    if (this.castingModeOn) {
-                        // Apply cast filter to current ranked list immediately
-                        ArcturusEngine.setCastingMode(true, playerContainer, (fallback) => {
-                            this.noCastSourceAlert  = true;
-                            this.noCastFallbackName = fallback?.source?.id || '';
-                        });
-                        const active = ArcturusEngine.getActiveSource();
-                        if (active) {
-                            this.setPlaybackMode({
-                                url: active.url,
-                                mimeType: '',
-                                type: 'embed',
-                                engineSourceId: active?.source?.id || ''
-                            });
-                        }
-                    } else {
-                        // Turning off: re-init with all sources
-                        ArcturusEngine.setCastingMode(false, null);
-                        this.refreshArcturusForEpisode();
-                    }
-                },
-
-                async refreshArcturusForEpisode() {
-                    // Called when user changes season/episode on a TV show
-                    if (this.selectedSource !== 'arcturusapi') return;
-                    this.arcturusReady = false;
-
-                    // Show loading state while re-ranking
-                    const _arcPlayerEl = document.getElementById('player-container');
-                    if (_arcPlayerEl) {
-                        _arcPlayerEl.innerHTML = `
-                            <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 gap-3">
-                                <div class="flex items-center gap-3 text-purple-400">
-                                    <svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                                    </svg>
-                                    <span class="text-white font-medium">Arcturus API — Finding best source…</span>
-                                </div>
-                                <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
-                            </div>`;
-                    }
-
-                    await ArcturusEngine.refresh({
-                        sources:      ARCTURUS_SOURCES,
-                        contentId:    this.contentId,
-                        contentType:  this.contentType,
-                        tvParams:     { season: this.selectedSeason, episode: this.selectedEpisode },
-                        castingMode:  this.castingModeOn,
-                        onNoCastSource: (fallback) => {
-                            this.noCastSourceAlert  = true;
-                            this.noCastFallbackName = fallback?.source?.id || '';
-                        },
-                        onReady: (ranked) => {
-                            this.arcturusReady = true;
-                            const top      = ranked[0];
-                            const castCount = ranked.filter(r => r.castCapable).length;
-                            const verified  = top?.verified ? '✓' : '';
-                            this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
-                            ArcturusEngine.setContentRatio(this.contentType === 'movie' ? 2.39 : 1.778);
-                            this.updateVideoUrl();
-                        }
-                    });
-                },
-                // ─────────────────────────────────────────────────────────────
 
                 getSourceUrl(sourceId, type, params) {
                     const source = this.availableSources.find(s => s.id === sourceId);
@@ -1990,12 +1632,7 @@
                 },
 
                 loadEpisode() {
-                    // Re-run Arcturus engine for the new episode, then load
-                    if (this.selectedSource === 'arcturusapi') {
-                        this.refreshArcturusForEpisode();
-                    } else {
-                        this.updateVideoUrl();
-                    }
+                    this.updateVideoUrl();
                 },
 
                 sections: {
@@ -2163,15 +1800,15 @@
                 
                 // AirPlay Support
                 showAirPlay() {
-                    const direct = this.getDirectCastMedia();
-                    const videoElement = direct?.videoElement || document.querySelector('#player-container video');
-
-                    if (videoElement && typeof videoElement.webkitShowPlaybackTargetPicker === 'function') {
+                    const videoElement = document.querySelector('#player-container video');
+                    
+                    if (videoElement && videoElement.webkitShowPlaybackTargetPicker) {
                         videoElement.webkitShowPlaybackTargetPicker();
                     } else {
+                        // Show helpful instructions
                         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
                         if (isSafari) {
-                            alert('📱 AirPlay needs a direct video stream on this page.\n\n1. Turn ON "Prefer Cast Sources"\n2. Wait for Arcturus to switch to a cast-ready source\n3. Tap AirPlay again\n\nIf the provider is iframe-only, use iOS/macOS Screen Mirroring instead.');
+                            alert('📱 To cast with AirPlay:\n\n1. Tap the video to show controls\n2. Look for the AirPlay icon (📺) in the video player\n3. Or use Safari\'s AirPlay button in the address bar\n4. Select your Apple TV or AirPlay device\n\n✨ Your video will appear on the TV!');
                         } else {
                             alert('📱 AirPlay is only available on:\n• iPhone, iPad, or Mac\n• Using Safari browser\n\nPlease open this site in Safari to use AirPlay.');
                         }
@@ -2183,50 +1820,19 @@
                     const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
                     
                     if (isChrome) {
-                        alert('📺 This source does not expose a direct media stream, so use Chrome tab casting:\n\n1. Click ⋮ in Chrome\n2. Select "Cast..."\n3. Choose "Cast tab"\n4. Pick your Chromecast/TV\n\nTip: Keep "Prefer Cast Sources" ON for best cast compatibility.');
+                        alert('📺 To cast to your TV:\n\n1. Click the ⋮ menu (3 dots) in Chrome\n2. Select "Cast..."\n3. Choose "Cast tab"\n4. Select your Chromecast or TV\n\n✨ Your video will appear on the TV!\n\nNote: This casts the entire browser tab to your TV.');
                     } else {
                         alert('📺 To cast to your TV:\n\nPlease use Google Chrome browser:\n1. Open this site in Chrome\n2. Click ⋮ menu → Cast\n3. Select your Chromecast device\n\nChrome is required for casting.');
                     }
                 },
 
-                startChromecast() {
-                    if (typeof cast === 'undefined' || typeof chrome === 'undefined') {
-                        this.showCastHelp();
-                        return;
-                    }
-
-                    if (this.selectedSource === 'arcturusapi' && !this.castingModeOn) {
-                        this.toggleCastingMode();
-                    }
-
-                    const castContext = cast.framework.CastContext.getInstance();
-                    const direct = this.getDirectCastMedia();
-
-                    const load = () => {
-                        if (direct?.mediaUrl) {
-                            this.loadMediaOnChromecast(direct.mediaUrl, direct.mimeType);
-                        } else {
-                            this.showCastHelp();
-                        }
-                    };
-
-                    const activeSession = castContext.getCurrentSession();
-                    if (activeSession) {
-                        load();
-                        return;
-                    }
-
-                    castContext.requestSession().then(load).catch(() => this.showCastHelp());
-                },
-
-                loadMediaOnChromecast(mediaUrl, mimeType) {
+                loadMediaOnChromecast() {
                     if (typeof cast === 'undefined' || typeof chrome === 'undefined') return;
-                    if (!mediaUrl) return;
                     
                     const session = cast.framework.CastContext.getInstance().getCurrentSession();
                     if (!session) return;
 
-                    const mediaInfo = new chrome.cast.media.MediaInfo(mediaUrl, mimeType || 'video/mp4');
+                    const mediaInfo = new chrome.cast.media.MediaInfo(this.currentVideoUrl, 'video/mp4');
                     mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
                     mediaInfo.metadata.title = this.content?.title || this.content?.name || 'Video';
                     mediaInfo.metadata.subtitle = this.isShow ? 
@@ -2262,10 +1868,9 @@
                         
                         // Monitor for AirPlay device availability
                         const checkVideo = () => {
-                            const videoElement = document.querySelector('#player-container video');
+                            const videoElement = document.querySelector('#player-container video') || 
+                                               document.querySelector('#player-container iframe');
                             if (videoElement) {
-                                if (videoElement.dataset.airplayBound === '1') return;
-                                videoElement.dataset.airplayBound = '1';
                                 videoElement.addEventListener('webkitplaybacktargetavailabilitychanged', (event) => {
                                     this.airPlayAvailable = event.availability === 'available';
                                     console.log('AirPlay availability:', event.availability);
@@ -2279,66 +1884,48 @@
                     }
 
                     // Initialize Chromecast
-                    const setupChromecast = () => {
-                        try {
-                            const castContext = cast.framework.CastContext.getInstance();
-                            
-                            castContext.setOptions({
-                                receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-                                autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-                            });
+                    window['__onGCastApiAvailable'] = (isAvailable) => {
+                        if (isAvailable) {
+                            try {
+                                const castContext = cast.framework.CastContext.getInstance();
+                                
+                                castContext.setOptions({
+                                    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+                                    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                                });
 
-                            this.chromecastAvailable = true;
-                            console.log('Chromecast initialized');
+                                this.chromecastAvailable = true;
+                                console.log('Chromecast initialized');
 
-                            castContext.addEventListener(
-                                cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
-                                (event) => {
-                                    switch (event.sessionState) {
-                                        case cast.framework.SessionState.SESSION_STARTED:
-                                            this.isCasting = true;
-                                            this.castSession = castContext.getCurrentSession();
-                                            console.log('Cast session started');
-                                            break;
-                                        case cast.framework.SessionState.SESSION_ENDED:
-                                        case cast.framework.SessionState.SESSION_ENDING:
-                                            this.isCasting = false;
-                                            this.castSession = null;
-                                            console.log('Cast session ended');
-                                            break;
+                                castContext.addEventListener(
+                                    cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+                                    (event) => {
+                                        switch (event.sessionState) {
+                                            case cast.framework.SessionState.SESSION_STARTED:
+                                                this.isCasting = true;
+                                                this.castSession = castContext.getCurrentSession();
+                                                console.log('Cast session started');
+                                                break;
+                                            case cast.framework.SessionState.SESSION_ENDED:
+                                            case cast.framework.SessionState.SESSION_ENDING:
+                                                this.isCasting = false;
+                                                this.castSession = null;
+                                                console.log('Cast session ended');
+                                                break;
+                                        }
                                     }
-                                }
-                            );
-                        } catch (error) {
-                            console.error('Error initializing Chromecast:', error);
+                                );
+                            } catch (error) {
+                                console.error('Error initializing Chromecast:', error);
+                            }
                         }
                     };
-
-                    if (window.cast?.framework && window.chrome?.cast) {
-                        setupChromecast();
-                    } else {
-                        window['__onGCastApiAvailable'] = (isAvailable) => {
-                            if (isAvailable) setupChromecast();
-                        };
-                    }
                 },
                 
                 // Progress Tracking for Continue Watching
                 startProgressTracking() {
                     console.log('[Continue Watching] Starting tracking...');
-
-                    if (this.progressSaveInterval) {
-                        clearInterval(this.progressSaveInterval);
-                        this.progressSaveInterval = null;
-                    }
-
-                    if (!this.progressTrackingBound) {
-                        document.addEventListener('visibilitychange', () => this.updateInferredVisibility());
-                        window.addEventListener('pagehide', () => this.saveToContinueWatching());
-                        window.addEventListener('beforeunload', () => this.saveToContinueWatching());
-                        this.progressTrackingBound = true;
-                    }
-
+                    
                     // Wait for content to load first
                     const checkAndTrack = () => {
                         if (!this.content) {
@@ -2346,17 +1933,18 @@
                             setTimeout(checkAndTrack, 1000);
                             return;
                         }
-
-                        this.beginWatchSession(this.currentVideoUrl);
+                        
                         console.log('[Continue Watching] Content loaded, saving...');
+                        // Add immediately when video loads
                         this.saveToContinueWatching();
-
-                        this.progressSaveInterval = setInterval(() => {
+                        
+                        // Then update every 30 seconds
+                        setInterval(() => {
                             console.log('[Continue Watching] Updating...');
                             this.saveToContinueWatching();
                         }, 30000);
                     };
-
+                    
                     checkAndTrack();
                 },
                 
@@ -2374,39 +1962,55 @@
                         episode: this.selectedEpisode,
                         source: this.selectedSource
                     });
-
-                    const continueWatching = this.getContinueWatchingList();
-                    const runtime = this.getRuntimeMinutes();
-                    const computedProgress = this.getComputedProgress(runtime);
-                    const progress = Math.round(this.clampProgress(computedProgress, 99) * 10) / 10;
-                    const timeRemaining = this.formatTimeRemaining(runtime, progress);
-
+                    
+                    // Get existing continue watching
+                    const continueWatching = JSON.parse(localStorage.getItem('continueWatching') || '[]');
+                    
+                    // Get runtime - for TV use episode runtime, for movies use movie runtime
+                    const runtime = this.isShow 
+                        ? (this.content.episode_run_time?.[0] || 45) 
+                        : (this.content.runtime || 90);
+                    
+                    const estimatedProgress = 15;
+                    const totalMinsRemaining = Math.floor(runtime * (100 - estimatedProgress) / 100);
+                    
+                    // Format time remaining as hours + mins
+                    let timeRemaining;
+                    if (totalMinsRemaining >= 60) {
+                        const hrs = Math.floor(totalMinsRemaining / 60);
+                        const mins = totalMinsRemaining % 60;
+                        timeRemaining = mins > 0 ? `${hrs}h ${mins}m` : `${hrs}h`;
+                    } else {
+                        timeRemaining = `${totalMinsRemaining}m`;
+                    }
+                    
                     const watchItem = {
                         id: this.contentId,
                         type: this.contentType,
                         title: this.content.title || this.content.name,
                         poster_path: this.content.poster_path,
                         vote_average: this.content.vote_average,
-                        progress: progress,
+                        progress: estimatedProgress,
                         timeRemaining: timeRemaining,
                         lastWatched: Date.now(),
                         season: this.isShow ? this.selectedSeason : null,
                         episode: this.isShow ? this.selectedEpisode : null,
                         source: this.selectedSource
                     };
-
+                    
+                    // For TV shows: key is just the show ID so it always updates the same entry
+                    // For movies: key is the movie ID
                     const key = String(this.contentId);
                     const filtered = continueWatching.filter(item => String(item.id) !== key);
-
-                    // If almost complete, remove from continue watching list.
-                    if (progress < 95) {
-                        filtered.unshift(watchItem);
-                    }
-
+                    
+                    // Add to front (most recent)
+                    filtered.unshift(watchItem);
+                    
+                    // Keep only last 20 items
                     const limited = filtered.slice(0, 20);
-
+                    
                     localStorage.setItem('continueWatching', JSON.stringify(limited));
-                    console.log('[Continue Watching] Saved! S' + this.selectedSeason + 'E' + this.selectedEpisode + ' | ' + progress + '% | ' + timeRemaining + ' remaining');
+                    console.log('[Continue Watching] Saved! S' + this.selectedSeason + 'E' + this.selectedEpisode + ' | ' + timeRemaining + ' remaining');
                 },
             }
         }
@@ -2452,10 +2056,6 @@
             const el = document.getElementById('live-user-count');
             if (el) el.textContent = count.toLocaleString();
         });
-    </script>
-    <script>
-        // Clean up Arcturus preload iframes when user navigates away
-        window.addEventListener('beforeunload', () => ArcturusEngine.destroy());
     </script>
 </body>
 </html>
