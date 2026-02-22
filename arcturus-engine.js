@@ -61,15 +61,14 @@ const ArcturusEngine = (() => {
     const QUALITY_URL    = './quality-data.json';
     const TIMEOUT_MS     = 3000;
     const PRELOAD_COUNT  = 3;
-    const STRICT_CASTING = false;
+    const STRICT_CASTING = true;
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
     // These sources support direct HLS/MP4 stream extraction so
     // AirPlay and Chromecast can receive them. All others are iframe-only.
     const CAST_CAPABLE = new Set([
-        'vidfast', 'videasy', 'vidzee', 'pstream',
-        'embedsu', 'vidsrcXyz', 'vidsrcrip',
-        'vidsrcsu', 'vidsrcvip', 'vidsrccx',
+        // Keep this list conservative: only sources that are reliably cast-friendly.
+        'vidfast', 'videasy', 'pstream',
     ]);
 
     // ── Quality baseline ──────────────────────────────────────────────────────
