@@ -64,11 +64,11 @@ const ArcturusEngine = (() => {
     const STRICT_CASTING = true;
 
     // ── Section A: Casting-compatible sources ─────────────────────────────────
-    // These sources support direct HLS/MP4 stream extraction so
-    // AirPlay and Chromecast can receive them. All others are iframe-only.
+    // Sources known to work best for casting workflows in this app.
     const CAST_CAPABLE = new Set([
-        // Keep this list conservative: only sources that are reliably cast-friendly.
-        'vidfast', 'videasy', 'pstream',
+        'vidfast', 'videasy', 'vidzee', 'pstream',
+        'embedsu', 'vidsrcXyz', 'vidsrcrip',
+        'vidsrcsu', 'vidsrcvip', 'vidsrccx',
     ]);
 
     // ── Quality baseline ──────────────────────────────────────────────────────
@@ -99,11 +99,6 @@ const ArcturusEngine = (() => {
         return fetch(url, { signal: ctrl.signal, mode: 'no-cors' })
             .then(r  => { clearTimeout(tid); return r; })
             .catch(() => { clearTimeout(tid); return null; });
-    }
-
-    function isLikelyDirectMediaUrl(url) {
-        if (!url) return false;
-        return /\.(m3u8|mp4)(\?|$)/i.test(url);
     }
 
     async function loadQuality() {
@@ -294,10 +289,7 @@ const ArcturusEngine = (() => {
                 return {
                     source: s,
                     url,
-                    // Cast-capable must be both:
-                    // 1) provider allowlist
-                    // 2) direct media URL shape (not an embed/player page)
-                    castCapable: CAST_CAPABLE.has(s.id) && isLikelyDirectMediaUrl(url)
+                    castCapable: CAST_CAPABLE.has(s.id)
                 };
             })
         );
