@@ -101,6 +101,11 @@ const ArcturusEngine = (() => {
             .catch(() => { clearTimeout(tid); return null; });
     }
 
+    function isLikelyDirectMediaUrl(url) {
+        if (!url) return false;
+        return /\.(m3u8|mp4)(\?|$)/i.test(url);
+    }
+
     async function loadQuality() {
         try {
             const r = await fetch(QUALITY_URL);
@@ -286,7 +291,14 @@ const ArcturusEngine = (() => {
                 if (!url) return null;
                 const r = await fetchTimeout(url, TIMEOUT_MS);
                 if (r === null) return null;
-                return { source: s, url, castCapable: CAST_CAPABLE.has(s.id) };
+                return {
+                    source: s,
+                    url,
+                    // Cast-capable must be both:
+                    // 1) provider allowlist
+                    // 2) direct media URL shape (not an embed/player page)
+                    castCapable: CAST_CAPABLE.has(s.id) && isLikelyDirectMediaUrl(url)
+                };
             })
         );
         const live = results.filter(Boolean);
