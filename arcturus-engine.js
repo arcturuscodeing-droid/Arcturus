@@ -113,6 +113,15 @@ const ArcturusEngine = (() => {
         }
     }
 
+    function isMobileOrIPadDevice() {
+        const ua = navigator.userAgent || '';
+        const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        const isMobileUA = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua);
+        const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+        const isSmallScreen = Math.min(window.innerWidth || 0, window.innerHeight || 0) <= 1024;
+        return isIOS || (isMobileUA && hasTouch) || (hasTouch && isSmallScreen);
+    }
+
     function fetchTimeout(url, ms) {
         const ctrl = new AbortController();
         const tid  = setTimeout(() => ctrl.abort(), ms);
@@ -339,7 +348,9 @@ const ArcturusEngine = (() => {
         f.setAttribute('data-arcturus-standby', '1');
         // No allow="autoplay" — prevents browser granting autoplay permission
         // which further reduces chance of video starting inside the hidden frame
-        f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+        if (!isMobileOrIPadDevice()) {
+            f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+        }
         document.body.appendChild(f);
         _warmStandby = f;
         console.log(`[Arcturus] Warm standby ready: ${next.source.id}`);
