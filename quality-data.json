@@ -1,33 +1,33 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-02-22T19:04:43.696Z",
+    "generated": "2026-02-22T07:50:37.023Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
   "mapple": {
-    "score": 66,
+    "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1889
+    "avg_response_ms": 2064
   },
   "pstream": {
     "score": 87,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 168
+    "avg_response_ms": 179
   },
   "multiembed": {
     "score": 68,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 2025
+    "avg_response_ms": 2241
   },
   "moviesapi": {
     "score": 73,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 218
+    "avg_response_ms": 123
   },
   "embedsu": {
     "score": 80,
@@ -45,73 +45,73 @@
     "score": 78,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 510
+    "avg_response_ms": 841
   },
   "vidsrcXyz": {
     "score": 72,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 2017
+    "avg_response_ms": 2349
   },
   "vidsrcrip": {
-    "score": 73,
-    "label": "1080p",
-    "verified": true,
-    "avg_response_ms": 982
-  },
-  "vidsrcsu": {
-    "score": 73,
-    "label": "1080p",
-    "verified": true,
-    "avg_response_ms": 921
-  },
-  "vidsrcvip": {
     "score": 71,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 1935
+    "avg_response_ms": 1382
+  },
+  "vidsrcsu": {
+    "score": 71,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 1539
+  },
+  "vidsrcvip": {
+    "score": 70,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 2128
   },
   "2embed": {
-    "score": 58,
+    "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 785
+    "avg_response_ms": 1041
   },
   "123embed": {
     "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1160
+    "avg_response_ms": 1569
   },
   "111movies": {
     "score": 52,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 2066
+    "avg_response_ms": 2348
   },
   "smashystream": {
-    "score": 61,
+    "score": 59,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 969
+    "avg_response_ms": 1169
   },
   "autoembed": {
-    "score": 66,
+    "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1956
+    "avg_response_ms": 2181
   },
   "videasy": {
     "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 1082
+    "avg_response_ms": 1384
   },
   "vidfast": {
     "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 1281
+    "avg_response_ms": 1450
   },
   "vidify": {
     "score": 50,
@@ -123,43 +123,43 @@
     "score": 62,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 2080
+    "avg_response_ms": 2357
   },
   "rive": {
-    "score": 62,
-    "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
-  },
-  "vidora": {
-    "score": 61,
+    "score": 63,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1672
+    "avg_response_ms": 1955
+  },
+  "vidora": {
+    "score": 60,
+    "label": "720p",
+    "verified": true,
+    "avg_response_ms": 2229
   },
   "nebula": {
     "score": 62,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1779
+    "avg_response_ms": 1860
   },
   "vidzee": {
     "score": 86,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 1728
+    "avg_response_ms": 1906
   },
   "spenflix": {
     "score": 51,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1658
+    "avg_response_ms": 1727
   },
   "vidsrccx": {
     "score": 49,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1775
+    "avg_response_ms": 1899
   },
   "uembed": {
     "score": 45,
