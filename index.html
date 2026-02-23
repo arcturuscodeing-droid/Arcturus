@@ -467,11 +467,11 @@
         .hcard-popup {
             position: fixed;
             z-index: 500;
-            width: 300px;
+            width: min(620px, calc(100vw - 16px));
             background: #181818;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: visible; /* allow shadow to escape */
-            box-shadow: 0 8px 48px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07);
+            box-shadow: 0 12px 56px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.08);
             opacity: 0;
             transform: scale(0.85) translateY(6px);
             transition: opacity 0.2s ease, transform 0.2s ease;
@@ -484,13 +484,33 @@
         }
         /* inner container clips the media top section */
         .hcard-inner {
-            border-radius: 8px;
+            position: relative;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+            min-height: 270px;
+            border-radius: 12px;
             overflow: hidden;
+        }
+        .hcard-info {
+            position: relative;
+            padding: 14px 14px 15px;
+            background: radial-gradient(120% 120% at 0% 0%, rgba(60,35,95,0.55), rgba(24,24,24,0.98) 55%);
+        }
+        .hcard-info::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -1px;
+            width: 34px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.18), rgba(255,255,255,0.06) 18%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+            z-index: 2;
         }
         .hcard-media {
             position: relative;
             width: 100%;
-            height: 170px;
+            height: 100%;
             background: #000;
             overflow: hidden;
         }
@@ -507,12 +527,21 @@
             display: block;
         }
         .hcard-media-gradient {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            height: 50%;
-            background: linear-gradient(to top, #181818, transparent);
+            position: absolute; inset: 0;
+            background:
+                linear-gradient(to top, rgba(0,0,0,0.48), rgba(0,0,0,0.1) 48%, rgba(0,0,0,0.36)),
+                linear-gradient(to left, rgba(8,8,10,0.55), rgba(8,8,10,0.06) 30%, rgba(8,8,10,0));
             pointer-events: none;
         }
-        .hcard-body { padding: 12px 14px 14px; }
+        .hcard-overview {
+            margin-top: 10px;
+            color: rgba(255,255,255,0.68);
+            font-size: 12px;
+            line-height: 1.35;
+            display: block;
+            overflow: hidden;
+            max-height: calc(1.35em * 4);
+        }
         .hcard-badge {
             display: inline-flex; align-items: center;
             padding: 2px 8px; border-radius: 4px;
@@ -541,6 +570,21 @@
         }
         .hcard-btn-icon:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.7); }
         .hcard-btn-icon.active { background: rgba(167,139,250,0.25); border-color: #a78bfa; color: #a78bfa; }
+        @media (max-width: 640px) {
+            .hcard-inner {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            .hcard-info::after {
+                display: none;
+            }
+            .hcard-media {
+                height: 170px;
+            }
+            .hcard-overview {
+                max-height: calc(1.35em * 3);
+            }
+        }
         /* Hide scrollbar on all scroll rows */
         .scroll-row {
             overflow-x: auto;
@@ -770,34 +814,8 @@
          :style="`left:${hcard.x}px;top:${hcard.y}px`">
 
         <div class="hcard-inner">
-            <!-- ── Media section: trailer or backdrop ── -->
-            <div class="hcard-media">
-                <!-- Trailer (plays after short delay once card opens) -->
-                <template x-if="hcard.trailerPlaying && hcard.trailerKey">
-                    <iframe
-                        :src="'https://www.youtube.com/embed/'+hcard.trailerKey
-                              +'?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0'
-                              +'&showinfo=0&iv_load_policy=3&disablekb=1&loop=1'"
-                        allow="autoplay"
-                        class="hcard-media iframe">
-                    </iframe>
-                </template>
-                <!-- Backdrop / poster thumbnail -->
-                <img :src="hcard.item?.backdrop_path
-                            ? 'https://image.tmdb.org/t/p/w500'+hcard.item.backdrop_path
-                            : (hcard.item?.poster_path
-                                ? 'https://image.tmdb.org/t/p/w500'+hcard.item.poster_path
-                                : '')"
-                     class="hcard-thumb"
-                     :class="hcard.trailerPlaying && hcard.trailerKey ? 'opacity-0' : 'opacity-100'"
-                     style="transition:opacity 0.3s ease;"
-                     :alt="hcard.item?.title || hcard.item?.name">
-                <!-- Logo overlay (title shown in image style) -->
-                <div class="hcard-media-gradient"></div>
-            </div>
-
-            <!-- ── Body ── -->
-            <div class="hcard-body">
+            <!-- ── Left info panel ── -->
+            <div class="hcard-info">
                 <!-- Action buttons row -->
                 <div class="flex items-center gap-2 mb-3">
                     <a :href="'watch.html?id='+(hcard.item?.id)+'&type='+(currentTab==='movies'?'movie':'tv')"
@@ -840,6 +858,33 @@
                         <span class="hcard-badge" x-text="g.name"></span>
                     </template>
                 </div>
+
+                <p class="hcard-overview" x-text="hcard.item?.overview || ''"></p>
+            </div>
+
+            <!-- ── Right trailer panel (autoplay on hover) ── -->
+            <div class="hcard-media">
+                <template x-if="hcard.trailerPlaying && hcard.trailerKey">
+                    <iframe
+                        :src="'https://www.youtube.com/embed/'+hcard.trailerKey
+                              +'?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0'
+                              +'&showinfo=0&iv_load_policy=3&disablekb=1&loop=1'"
+                        allow="autoplay"
+                        class="hcard-media iframe">
+                    </iframe>
+                </template>
+
+                <img :src="hcard.item?.backdrop_path
+                            ? 'https://image.tmdb.org/t/p/w500'+hcard.item.backdrop_path
+                            : (hcard.item?.poster_path
+                                ? 'https://image.tmdb.org/t/p/w500'+hcard.item.poster_path
+                                : '')"
+                     class="hcard-thumb"
+                     :class="hcard.trailerPlaying && hcard.trailerKey ? 'opacity-0' : 'opacity-100'"
+                     style="transition:opacity 0.28s ease;"
+                     :alt="hcard.item?.title || hcard.item?.name">
+
+                <div class="hcard-media-gradient"></div>
             </div>
         </div>
     </div>
@@ -2358,15 +2403,16 @@
                     clearTimeout(this._hcardTimer);
                     this._hcardTimer = setTimeout(async () => {
                         const rect = event.currentTarget.getBoundingClientRect();
-                        const cardW = 320;
+                        const cardW = Math.min(620, window.innerWidth - 16);
+                        const cardH = window.innerWidth <= 640 ? 420 : 290;
                         const vw = window.innerWidth;
                         let x = rect.left + rect.width / 2 - cardW / 2;
                         // Keep card inside viewport
                         x = Math.max(8, Math.min(vw - cardW - 8, x));
                         let y = rect.bottom + 8;
                         // If too low, show above
-                        if (y + 400 > window.innerHeight) {
-                            y = rect.top - 400 - 8;
+                        if (y + cardH > window.innerHeight - 8) {
+                            y = Math.max(8, rect.top - cardH - 8);
                         }
                         this.hcard.x = x;
                         this.hcard.y = y;
@@ -2386,18 +2432,19 @@
                             ]);
                             const [detData, vidData] = await Promise.all([detRes.json(), vidRes.json()]);
                             this.hcard.details = detData;
-                            const trailer = (vidData.results||[]).find(v => v.type==='Trailer' && v.site==='YouTube')
-                                          || (vidData.results||[])[0];
+                            // Only use YouTube keys; non-YouTube entries cause broken embeds.
+                            const ytVideos = (vidData.results || []).filter(v => v.site === 'YouTube' && v.key);
+                            const trailer = ytVideos.find(v => v.type === 'Trailer') || ytVideos[0] || null;
                             this.hcard.trailerKey = trailer ? trailer.key : null;
-                            // Small delay then autoplay trailer
-                            if (this.hcard.visible && this.hcard.item?.id === item.id) {
+                            // Start trailer after ~3-4s delay (Netflix-like preview timing).
+                            if (this.hcard.visible && this.hcard.item?.id === item.id && this.hcard.trailerKey) {
                                 setTimeout(() => {
-                                    if (this.hcard.visible && this.hcard.item?.id === item.id)
+                                    if (this.hcard.visible && this.hcard.item?.id === item.id && this.hcard.trailerKey)
                                         this.hcard.trailerPlaying = true;
-                                }, 400);
+                                }, 3400);
                             }
                         } catch {}
-                    }, 3000); // 3 second hover delay
+                    }, 650);
                 },
 
                 hcardLeave() {
