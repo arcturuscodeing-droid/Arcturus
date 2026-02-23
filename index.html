@@ -289,6 +289,258 @@
         .settings-icon:hover {
             transform: rotate(180deg);
         }
+
+        /* ── Navbar: fully transparent over hero, blur on scroll ── */
+        #main-nav {
+            transition: background 0.5s ease, backdrop-filter 0.5s ease,
+                        border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+        nav.nav-transparent {
+            background: transparent !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
+        nav.nav-scrolled {
+            background: rgba(8, 8, 18, 0.92) !important;
+            backdrop-filter: blur(24px) !important;
+            -webkit-backdrop-filter: blur(24px) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+            box-shadow: 0 1px 40px rgba(0,0,0,0.5) !important;
+        }
+
+        /* ── Hero slider ── */
+        .hero-slide {
+            position: absolute; inset: 0;
+            opacity: 0;
+            transition: opacity 1.1s cubic-bezier(0.4,0,0.2,1);
+            pointer-events: none;
+        }
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .hero-backdrop {
+            position: absolute; inset: 0;
+            background-size: cover;
+            background-position: center 20%;
+            transform: scale(1.0);
+            transition: transform 10s ease;
+            will-change: transform;
+        }
+        .hero-slide.active .hero-backdrop {
+            transform: scale(1.05);
+        }
+
+        /* Content fades out before trailer appears */
+        .hero-content {
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            will-change: opacity, transform;
+        }
+        .hero-content.hidden-for-trailer {
+            opacity: 0 !important;
+            pointer-events: none;
+            transform: translateY(12px);
+        }
+
+        /* Trailer wrap — sits behind content, fades in */
+        .hero-trailer-wrap {
+            position: absolute; inset: 0;
+            opacity: 0;
+            transition: opacity 0.7s ease 0.3s; /* slight delay so content fades first */
+            pointer-events: none;
+            z-index: 2;
+        }
+        .hero-trailer-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* The YouTube iframe fills the entire hero seamlessly */
+        .hero-trailer-wrap iframe {
+            position: absolute;
+            /* Oversized to crop letterbox bars: 16:9 content in ~56.25% aspect */
+            /* YouTube embeds have thin black bars — we scale to cover them       */
+            top: 50%; left: 50%;
+            width: 100vw;
+            /* Force enough height to cover the hero regardless of aspect ratio */
+            min-height: 100%;
+            height: calc(100vw * 9 / 16);
+            transform: translate(-50%, -50%) scale(1.04);
+            border: none;
+            pointer-events: none;
+        }
+
+        /* Sound toggle button — appears once trailer is playing */
+        .hero-sound-btn {
+            position: absolute;
+            bottom: 88px; right: 32px;
+            z-index: 30;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.55);
+            border: 1.5px solid rgba(255,255,255,0.35);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            backdrop-filter: blur(8px);
+        }
+        .hero-sound-btn:hover {
+            background: rgba(0,0,0,0.8);
+            border-color: rgba(255,255,255,0.7);
+            transform: scale(1.08);
+        }
+
+        /* Arrows: clean, minimal — always visible, fade slightly over trailer */
+        .hero-arrow {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            z-index: 25;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, opacity 0.2s, transform 0.2s;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            opacity: 0.6;
+        }
+        .hero-arrow:hover {
+            background: rgba(0,0,0,0.65);
+            border-color: rgba(255,255,255,0.5);
+            opacity: 1;
+            transform: translateY(-50%) scale(1.08);
+        }
+        #hero-slider:hover .hero-arrow { opacity: 1; }
+
+        /* Dots */
+        .hero-dot {
+            height: 3px;
+            border-radius: 9999px;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            cursor: pointer;
+            min-width: 20px;
+        }
+        .hero-dot.active {
+            background: white;
+            min-width: 36px;
+        }
+
+        /* Progress bar */
+        .hero-progress {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 2px;
+            background: linear-gradient(to right, #a78bfa, #7c3aed);
+            transition: width 0.12s linear;
+            z-index: 10;
+        }
+
+        /* Close trailer X — appears in top-right only during trailer */
+        .hero-close-btn {
+            position: absolute;
+            top: 80px; right: 24px;
+            z-index: 35;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            backdrop-filter: blur(8px);
+        }
+        .hero-close-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.1);
+        }
+
+        /* ══════════════════════════════════════
+           NETFLIX HOVER CARD
+           ══════════════════════════════════════ */
+        .hcard-anchor { position: static; }
+
+        .hcard-popup {
+            position: fixed;
+            z-index: 500;
+            width: 300px;
+            background: #181818;
+            border-radius: 8px;
+            overflow: visible; /* allow shadow to escape */
+            box-shadow: 0 8px 48px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.07);
+            opacity: 0;
+            transform: scale(0.85) translateY(6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+        .hcard-popup.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+        /* inner container clips the media top section */
+        .hcard-inner {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .hcard-media {
+            position: relative;
+            width: 100%;
+            height: 170px;
+            background: #000;
+            overflow: hidden;
+        }
+        .hcard-media iframe {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+        .hcard-thumb {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .hcard-media-gradient {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 50%;
+            background: linear-gradient(to top, #181818, transparent);
+            pointer-events: none;
+        }
+        .hcard-body { padding: 12px 14px 14px; }
+        .hcard-badge {
+            display: inline-flex; align-items: center;
+            padding: 2px 8px; border-radius: 4px;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+            background: rgba(167,139,250,0.18);
+            border: 1px solid rgba(167,139,250,0.28);
+            color: #c4b5fd;
+        }
+        .hcard-btn-play {
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            background: #fff; color: #000;
+            border-radius: 4px; font-size: 12px; font-weight: 700;
+            padding: 7px 14px;
+            transition: background 0.15s;
+            text-decoration: none;
+            flex: 1;
+        }
+        .hcard-btn-play:hover { background: rgba(255,255,255,0.85); }
+        .hcard-btn-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1.5px solid rgba(255,255,255,0.35);
+            transition: background 0.15s, border-color 0.15s;
+            cursor: pointer;
+        }
+        .hcard-btn-icon:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.7); }
+        .hcard-btn-icon.active { background: rgba(167,139,250,0.25); border-color: #a78bfa; color: #a78bfa; }
         /* Hide scrollbar on all scroll rows */
         .scroll-row {
             overflow-x: auto;
@@ -385,7 +637,7 @@
         class="fixed inset-0 pointer-events-none z-0"></div>
 
     <!-- navigation -->
-    <nav class="fixed w-full z-50 glass-effect">
+    <nav class="fixed w-full z-50 glass-effect" id="main-nav" :class="navScrolled ? 'nav-scrolled' : 'nav-transparent'">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4 md:space-x-8">
@@ -500,6 +752,98 @@
         </div>
     </nav>
 
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- NETFLIX HOVER CARD                                  -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div x-show="hcard.visible"
+         x-cloak
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0 scale-90"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-90"
+         @mouseenter="hcardPopupEnter()"
+         @mouseleave="hcardPopupLeave()"
+         class="hcard-popup"
+         :class="hcard.visible ? 'visible' : ''"
+         :style="`left:${hcard.x}px;top:${hcard.y}px`">
+
+        <div class="hcard-inner">
+            <!-- ── Media section: trailer or backdrop ── -->
+            <div class="hcard-media">
+                <!-- Trailer (plays after short delay once card opens) -->
+                <template x-if="hcard.trailerPlaying && hcard.trailerKey">
+                    <iframe
+                        :src="'https://www.youtube.com/embed/'+hcard.trailerKey
+                              +'?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0'
+                              +'&showinfo=0&iv_load_policy=3&disablekb=1&loop=1'"
+                        allow="autoplay"
+                        class="hcard-media iframe">
+                    </iframe>
+                </template>
+                <!-- Backdrop / poster thumbnail -->
+                <img :src="hcard.item?.backdrop_path
+                            ? 'https://image.tmdb.org/t/p/w500'+hcard.item.backdrop_path
+                            : (hcard.item?.poster_path
+                                ? 'https://image.tmdb.org/t/p/w500'+hcard.item.poster_path
+                                : '')"
+                     class="hcard-thumb"
+                     :class="hcard.trailerPlaying && hcard.trailerKey ? 'opacity-0' : 'opacity-100'"
+                     style="transition:opacity 0.3s ease;"
+                     :alt="hcard.item?.title || hcard.item?.name">
+                <!-- Logo overlay (title shown in image style) -->
+                <div class="hcard-media-gradient"></div>
+            </div>
+
+            <!-- ── Body ── -->
+            <div class="hcard-body">
+                <!-- Action buttons row -->
+                <div class="flex items-center gap-2 mb-3">
+                    <a :href="'watch.html?id='+(hcard.item?.id)+'&type='+(currentTab==='movies'?'movie':'tv')"
+                       class="hcard-btn-play">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        Play
+                    </a>
+                    <button @click.stop="toggleWatchLater(hcard.item)"
+                            class="hcard-btn-icon"
+                            :class="isInWatchLater(hcard.item) ? 'active' : ''"
+                            title="Add to Watchlist">
+                        <!-- plus / checkmark -->
+                        <svg x-show="!isInWatchLater(hcard.item)" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                        <svg x-show="isInWatchLater(hcard.item)" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" style="color:#a78bfa"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                    </button>
+                    <a :href="'watch.html?id='+(hcard.item?.id)+'&type='+(currentTab==='movies'?'movie':'tv')"
+                       class="hcard-btn-icon ml-auto"
+                       title="More Info">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Title -->
+                <p class="text-white font-bold text-sm mb-2 leading-snug" x-text="hcard.item?.title || hcard.item?.name"></p>
+
+                <!-- Meta: rating · year · runtime -->
+                <div class="flex items-center gap-2 text-xs mb-2.5 flex-wrap">
+                    <span class="text-green-400 font-bold"
+                          x-text="hcard.item?.vote_average ? Math.round(hcard.item.vote_average*10)+'% Match' : ''"></span>
+                    <span class="text-gray-400"
+                          x-text="hcard.item?.release_date?.slice(0,4) || hcard.item?.first_air_date?.slice(0,4)"></span>
+                    <span class="text-gray-400"
+                          x-show="hcardRuntime(hcard.details)"
+                          x-text="hcardRuntime(hcard.details)"></span>
+                </div>
+
+                <!-- Genre tags -->
+                <div class="flex flex-wrap gap-1" x-show="hcard.details?.genres?.length">
+                    <template x-for="g in (hcard.details?.genres || []).slice(0,3)" :key="g.id">
+                        <span class="hcard-badge" x-text="g.name"></span>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SEARCH MODAL -->
     <div x-show="searchQuery && searchQuery.trim().length > 0" x-cloak
          class="fixed inset-0 z-[110] bg-gray-900 overflow-y-auto pt-24">
@@ -551,8 +895,150 @@
         </div>
     </div>
 
-    <!-- hero section -->
-    <div class="pt-24 pb-12 px-6">
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- HERO SLIDER                                         -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <div id="hero-slider" class="relative w-full overflow-hidden" style="height:92vh;min-height:520px;max-height:900px;"
+         @mouseenter="heroPaused=true" @mouseleave="heroPaused=false">
+
+        <!-- slides -->
+        <template x-for="(slide, i) in heroSlides" :key="slide.id">
+            <div class="hero-slide" :class="heroIndex===i ? 'active' : ''">
+                <!-- backdrop image -->
+                <div class="hero-backdrop"
+                     :style="'background-image:url(https://image.tmdb.org/t/p/original'+slide.backdrop_path+')'">
+                </div>
+                <!-- gradient overlays -->
+                <div class="absolute inset-0" style="background:linear-gradient(to right,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.5) 50%,rgba(0,0,0,0.1) 100%)"></div>
+                <div class="absolute inset-0" style="background:linear-gradient(to top,rgba(10,10,20,0.98) 0%,rgba(0,0,0,0) 40%)"></div>
+
+                <!-- trailer: seamless fullscreen YouTube embed ─────────────── -->
+                <!-- The .hero-trailer-wrap CSS positions the iframe LARGER than  -->
+                <!-- the container and centers it, cropping all letterbox bars.   -->
+                <div class="hero-trailer-wrap" :class="heroTrailerVisible && heroIndex===i ? 'visible' : ''">
+                    <!-- Dark overlay so trailer doesn't blow out the hero -->
+                    <div class="absolute inset-0 bg-black/30 pointer-events-none" style="z-index:1;"></div>
+                    <template x-if="heroTrailerVisible && heroIndex===i && slide.trailerKey">
+                        <iframe
+                            :src="'https://www.youtube.com/embed/'+slide.trailerKey
+                                  +'?autoplay=1&mute='+(heroMuted?1:0)
+                                  +'&controls=0&modestbranding=1&rel=0&showinfo=0'
+                                  +'&enablejsapi=1&iv_load_policy=3&disablekb=1'"
+                            allow="autoplay; fullscreen"
+                            allowfullscreen
+                            @load="heroTrailerLoaded()"
+                            id="hero-yt-iframe">
+                        </iframe>
+                    </template>
+                    <!-- No trailer available fallback -->
+                    <div x-show="heroTrailerVisible && heroIndex===i && !slide.trailerKey"
+                         class="absolute inset-0 flex items-center justify-center"
+                         style="z-index:2;">
+                        <p class="text-gray-500 text-sm tracking-wide">No trailer available</p>
+                    </div>
+                </div>
+
+                <!-- content: title / overview / buttons -->
+                <div class="hero-content absolute inset-0 flex flex-col justify-end pb-24 px-8 md:px-16 lg:px-24 max-w-3xl"
+                     :class="heroContentHidden && heroIndex===i ? 'hidden-for-trailer' : ''">
+                    <!-- badge -->
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-xs font-bold tracking-widest uppercase text-purple-400 bg-purple-900/40 border border-purple-500/30 px-3 py-1 rounded-full">
+                            Featured
+                        </span>
+                        <span class="text-xs text-gray-400" x-text="slide.release_date ? slide.release_date.slice(0,4) : ''"></span>
+                        <span class="text-xs text-yellow-400 font-semibold" x-text="slide.vote_average ? '⭐ ' + slide.vote_average.toFixed(1) : ''"></span>
+                    </div>
+                    <!-- title -->
+                    <h1 class="text-4xl md:text-6xl font-black leading-none tracking-tight mb-4 drop-shadow-2xl"
+                        x-text="slide.title || slide.name"
+                        style="text-shadow:0 2px 20px rgba(0,0,0,0.8)">
+                    </h1>
+                    <!-- overview -->
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed mb-7 line-clamp-3 max-w-xl"
+                       x-text="slide.overview"></p>
+                    <!-- buttons -->
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <a :href="'watch.html?id='+slide.id+'&type='+(heroType)"
+                           class="flex items-center gap-2 bg-white text-black font-bold px-7 py-3 rounded-full hover:bg-gray-200 transition-all duration-200 shadow-xl text-sm">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            Play
+                        </a>
+                        <button @click="playHeroTrailer(slide)"
+                                class="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-white font-semibold px-7 py-3 rounded-full transition-all duration-200 text-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+                            Watch Trailer
+                        </button>
+                        <button @click.stop="toggleWatchLater(slide)"
+                                class="flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 font-semibold px-5 py-3 rounded-full transition-all duration-200 text-sm"
+                                :class="isInWatchLater(slide) ? 'text-purple-400' : 'text-white'">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                            <span x-text="isInWatchLater(slide) ? 'Saved' : 'Watchlist'"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- ── Prev / Next arrows ── -->
+        <button @click="heroPrev()" class="hero-arrow left-5 md:left-10" x-show="heroSlides.length > 1">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+        </button>
+        <button @click="heroNext()" class="hero-arrow right-5 md:right-10" x-show="heroSlides.length > 1">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </button>
+
+        <!-- ── Sound toggle (only when trailer playing) ── -->
+        <button @click="heroToggleSound()"
+                x-show="heroTrailerVisible"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-90"
+                x-transition:enter-end="opacity-100 scale-100"
+                class="hero-sound-btn">
+            <!-- muted icon -->
+            <svg x-show="heroMuted" class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16.5 12A4.5 4.5 0 0014 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0017.73 18.27L19.73 20.27 21 19 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+            </svg>
+            <!-- unmuted icon -->
+            <svg x-show="!heroMuted" class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+        </button>
+
+        <!-- ── Close trailer (top right, appears over trailer) ── -->
+        <button @click="closeHeroTrailer()"
+                x-show="heroTrailerVisible"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                class="hero-close-btn">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- ── Slide indicator dots (bottom center) ── -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5"
+             x-show="heroSlides.length > 1">
+            <template x-for="(s, i) in heroSlides" :key="i">
+                <button @click="heroGoTo(i)"
+                        class="hero-dot"
+                        :class="heroIndex===i ? 'active' : ''"
+                        style="width:20px;">
+                </button>
+            </template>
+        </div>
+
+        <!-- ── Progress bar ── -->
+        <div class="hero-progress" :style="'width:'+heroProgress+'%'"></div>
+    </div>
+
+    <!-- content sections with padding (no more pt-24) -->
+    <div class="pb-12 px-6">
         <div class="container mx-auto">
             
             <!-- Continue Watching Section -->
@@ -602,7 +1088,7 @@
                 <div x-show="items.length > 0" class="relative">
                     <div class="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-purple-600 scrollbar-track-gray-800">
                         <template x-for="(item, index) in items" :key="index">
-                            <div class="relative flex-shrink-0 w-48 md:w-56">
+                            <div class="relative flex-shrink-0 w-48 md:w-56 hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + item.type + (item.season ? '&season=' + item.season + '&episode=' + item.episode : '') + (item.source ? '&source=' + item.source : '')"
                                    class="block rounded-lg overflow-hidden bg-gray-800 card-hover">
                                     <div class="relative aspect-[2/3]">
@@ -671,7 +1157,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in popular" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -715,7 +1201,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in netflix" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -744,7 +1230,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in trending" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -773,7 +1259,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in disney" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -802,7 +1288,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in hbo" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -831,7 +1317,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in apple" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -860,7 +1346,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in prime" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -889,7 +1375,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in newReleases" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -918,7 +1404,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in action" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -947,7 +1433,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in comedy" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -976,7 +1462,7 @@
                     </div>
                     <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-purple" style="cursor:grab;">
                         <template x-for="(item, index) in horror" :key="item.id">
-                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative">
+                            <div class="flex-none w-36 sm:w-44 md:w-48 group cursor-pointer relative hcard-anchor" @mouseenter="hcardEnter(item, $event)" @mouseleave="hcardLeave()">
                                 <a :href="'watch.html?id=' + item.id + '&type=' + (currentTab === 'movies' ? 'movie' : 'tv')"
                                     class="block rounded-lg overflow-hidden bg-gray-800 aspect-[2/3] relative card-hover">
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
@@ -1429,6 +1915,7 @@
                 minRating: '',
                 filteredContent: [],
                 mobileMenu: false,
+                navScrolled: false,
                 sortBy: 'popularity.desc',
                 yearRange: '',
                 selectedLanguage: '',
@@ -1443,6 +1930,20 @@
                 action: [],
                 comedy: [],
                 horror: [],
+
+                // ── Hero slider state ──
+                heroSlides: [],
+                heroIndex: 0,
+                heroType: 'movie',
+                heroProgress: 0,
+                heroPaused: false,
+                heroTrailerVisible: false,
+                heroContentHidden: false,
+                heroMuted: true,
+                _heroTimer: null,
+                _heroProgressTimer: null,
+                _heroProgressStart: null,
+                _heroTrailerIframe: null,
 
                 async init() {
                     const savedItems = localStorage.getItem('watchLater');
@@ -1474,6 +1975,12 @@
                     await this.fetchGenres();
                     await this.fetchContent();
                     await this.fetchPopularAndNetflix();
+                    this.fetchHeroSlides();
+
+                    // Transparent nav: scroll listener
+                    const updateNav = () => { this.navScrolled = window.scrollY > 80; };
+                    window.addEventListener('scroll', updateNav, { passive: true });
+                    updateNav();
 
                     this.$watch('currentTab', async () => {
                         this.currentPage = 1;
@@ -1483,6 +1990,9 @@
                         await this.fetchGenres();
                         await this.fetchContent();
                         await this.fetchPopularAndNetflix();
+                        this.heroSlides = [];
+                        this.heroIndex = 0;
+                        this.fetchHeroSlides();
                     });
 
                     this.$watch('language', () => {
@@ -1702,6 +2212,226 @@
                     } catch (error) {
                         console.error('Error fetching content:', error);
                     }
+                },
+
+                // ── Hero Slider Methods ──────────────────────────────
+                async fetchHeroSlides() {
+                    const base = 'https://api.themoviedb.org/3';
+                    this.heroType = this.currentTab === 'movies' ? 'movie' : 'tv';
+                    const type = this.heroType;
+                    try {
+                        const [trendRes, nowRes] = await Promise.all([
+                            fetch(`${base}/trending/${type}/week?api_key=${this.apiKey}&language=${this.language}`),
+                            fetch(`${base}/${type}/now_playing?api_key=${this.apiKey}&language=${this.language}&page=1`)
+                        ]);
+                        const [trendData, nowData] = await Promise.all([trendRes.json(), nowRes.json()]);
+                        const pool = [...(trendData.results||[]), ...(nowData.results||[])];
+                        // Dedupe, require backdrop
+                        const seen = new Set();
+                        const slides = pool.filter(m => {
+                            if (!m.backdrop_path || seen.has(m.id)) return false;
+                            seen.add(m.id);
+                            return true;
+                        }).slice(0, 8);
+                        // Fetch trailers for each slide in parallel (best-effort)
+                        await Promise.all(slides.map(async slide => {
+                            try {
+                                const vRes = await fetch(`${base}/${type}/${slide.id}/videos?api_key=${this.apiKey}`);
+                                const vData = await vRes.json();
+                                const trailer = (vData.results||[]).find(v => v.type==='Trailer' && v.site==='YouTube')
+                                             || (vData.results||[])[0];
+                                slide.trailerKey = trailer ? trailer.key : null;
+                            } catch { slide.trailerKey = null; }
+                        }));
+                        this.heroSlides = slides;
+                        if (slides.length > 0) this.heroStartAuto();
+                    } catch(e) { console.error('[Hero] fetch error', e); }
+                },
+
+                heroStartAuto() {
+                    this.heroProgress = 0;
+                    const DURATION = 9000; // 9 seconds per slide
+                    const TICK = 100;
+                    this._heroProgressStart = Date.now();
+                    clearInterval(this._heroProgressTimer);
+                    this._heroProgressTimer = setInterval(() => {
+                        if (this.heroPaused || this.heroTrailerVisible) return;
+                        const elapsed = Date.now() - this._heroProgressStart;
+                        this.heroProgress = Math.min(100, (elapsed / DURATION) * 100);
+                        if (elapsed >= DURATION) {
+                            this.heroNext();
+                        }
+                    }, TICK);
+                },
+
+                heroGoTo(i) {
+                    this.closeHeroTrailer();
+                    this.heroIndex = i;
+                    this.heroProgress = 0;
+                    this._heroProgressStart = Date.now();
+                },
+
+                heroNext() {
+                    this.closeHeroTrailer();
+                    this.heroIndex = (this.heroIndex + 1) % this.heroSlides.length;
+                    this.heroProgress = 0;
+                    this._heroProgressStart = Date.now();
+                },
+
+                heroPrev() {
+                    this.closeHeroTrailer();
+                    this.heroIndex = (this.heroIndex - 1 + this.heroSlides.length) % this.heroSlides.length;
+                    this.heroProgress = 0;
+                    this._heroProgressStart = Date.now();
+                },
+
+                playHeroTrailer(slide) {
+                    if (!slide.trailerKey) {
+                        // No trailer — just note it
+                        console.log('[Hero] No trailer available for', slide.title || slide.name);
+                        return;
+                    }
+                    this.heroContentHidden = true;
+                    setTimeout(() => { this.heroTrailerVisible = true; }, 450);
+                },
+
+                heroTrailerLoaded() {
+                    // Trailer iframe loaded — set timer to auto-advance when done
+                    // YouTube API postMessage: listen for ended state
+                    const onMsg = (e) => {
+                        try {
+                            const data = JSON.parse(e.data);
+                            if (data.event === 'onStateChange' && data.info === 0) {
+                                // video ended
+                                window.removeEventListener('message', onMsg);
+                                this.closeHeroTrailer();
+                                setTimeout(() => this.heroNext(), 600);
+                            }
+                        } catch {}
+                    };
+                    window.addEventListener('message', onMsg);
+                    // Fallback: 3.5 min max trailer time
+                    setTimeout(() => {
+                        window.removeEventListener('message', onMsg);
+                        if (this.heroTrailerVisible) {
+                            this.closeHeroTrailer();
+                            this.heroNext();
+                        }
+                    }, 210000);
+                },
+
+                heroToggleSound() {
+                    this.heroMuted = !this.heroMuted;
+                    // Reload iframe with new mute param so YouTube picks it up
+                    // (YouTube JS API mute commands don't work cross-origin)
+                    // We close and reopen — the trailer-wrap visible state handles timing
+                    const slide = this.heroSlides[this.heroIndex];
+                    if (!slide?.trailerKey) return;
+                    // Toggle heroMuted already done; Alpine reactivity will
+                    // re-render the <template x-if> with the new mute param
+                    // because the :src changes. Force re-render by briefly
+                    // toggling visibility:
+                    this.heroTrailerVisible = false;
+                    this.$nextTick(() => { this.heroTrailerVisible = true; });
+                },
+
+                closeHeroTrailer() {
+                    this.heroTrailerVisible = false;
+                    this.heroContentHidden = false;
+                },
+
+                // ── Netflix Hover Card ────────────────────────────────
+                hcard: {
+                    visible: false,
+                    item: null,
+                    x: 0,
+                    y: 0,
+                    trailerKey: null,
+                    trailerPlaying: false,
+                    details: null,
+                },
+                _hcardTimer: null,
+                _hcardLeaveTimer: null,
+
+                async hcardEnter(item, event) {
+                    clearTimeout(this._hcardLeaveTimer);
+                    clearTimeout(this._hcardTimer);
+                    this._hcardTimer = setTimeout(async () => {
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        const cardW = 320;
+                        const vw = window.innerWidth;
+                        let x = rect.left + rect.width / 2 - cardW / 2;
+                        // Keep card inside viewport
+                        x = Math.max(8, Math.min(vw - cardW - 8, x));
+                        let y = rect.bottom + 8;
+                        // If too low, show above
+                        if (y + 400 > window.innerHeight) {
+                            y = rect.top - 400 - 8;
+                        }
+                        this.hcard.x = x;
+                        this.hcard.y = y;
+                        this.hcard.item = item;
+                        this.hcard.trailerKey = null;
+                        this.hcard.trailerPlaying = false;
+                        this.hcard.details = null;
+                        this.hcard.visible = true;
+
+                        // Fetch details + trailer in parallel
+                        const type = this.currentTab === 'movies' ? 'movie' : 'tv';
+                        const base = 'https://api.themoviedb.org/3';
+                        try {
+                            const [detRes, vidRes] = await Promise.all([
+                                fetch(`${base}/${type}/${item.id}?api_key=${this.apiKey}&language=${this.language}`),
+                                fetch(`${base}/${type}/${item.id}/videos?api_key=${this.apiKey}`)
+                            ]);
+                            const [detData, vidData] = await Promise.all([detRes.json(), vidRes.json()]);
+                            this.hcard.details = detData;
+                            const trailer = (vidData.results||[]).find(v => v.type==='Trailer' && v.site==='YouTube')
+                                          || (vidData.results||[])[0];
+                            this.hcard.trailerKey = trailer ? trailer.key : null;
+                            // Small delay then autoplay trailer
+                            if (this.hcard.visible && this.hcard.item?.id === item.id) {
+                                setTimeout(() => {
+                                    if (this.hcard.visible && this.hcard.item?.id === item.id)
+                                        this.hcard.trailerPlaying = true;
+                                }, 400);
+                            }
+                        } catch {}
+                    }, 3000); // 3 second hover delay
+                },
+
+                hcardLeave() {
+                    clearTimeout(this._hcardTimer);
+                    this._hcardLeaveTimer = setTimeout(() => {
+                        this.hcard.visible = false;
+                        this.hcard.trailerPlaying = false;
+                        this.hcard.item = null;
+                        this.hcard.trailerKey = null;
+                        this.hcard.details = null;
+                    }, 120);
+                },
+
+                hcardPopupEnter() {
+                    clearTimeout(this._hcardLeaveTimer);
+                },
+
+                hcardPopupLeave() {
+                    this.hcard.visible = false;
+                    this.hcard.trailerPlaying = false;
+                    this.hcard.item = null;
+                    this.hcard.trailerKey = null;
+                    this.hcard.details = null;
+                },
+
+                hcardRuntime(details) {
+                    if (!details) return '';
+                    if (details.runtime) {
+                        const h = Math.floor(details.runtime / 60);
+                        const m = details.runtime % 60;
+                        return h > 0 ? `${h}h ${m}m` : `${m}m`;
+                    }
+                    if (details.episode_run_time?.length) return `${details.episode_run_time[0]}m/ep`;
+                    return '';
                 },
 
                 pickRandomFromCategories() {
