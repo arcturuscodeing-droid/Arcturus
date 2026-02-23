@@ -372,6 +372,7 @@
                     <div class="bg-gray-800 rounded-lg overflow-hidden">
                         <div class="relative pt-[56.25%]" id="player-container">
                             <iframe x-bind:src="currentVideoUrl" 
+                                    data-main-player="1"
                                     class="absolute top-0 left-0 w-full h-full" 
                                     frameborder="0" 
                                     scrolling="no" 
@@ -1255,6 +1256,7 @@
                 selectedSource: 'arcturusapi',
                 arcturusReady: false,
                 arcturusStatusText: '',
+                arcturusEngineEnabled: false,
                 autoCropOn: localStorage.getItem('arcturusAutoCrop') !== 'false',
                 castingModeOn: localStorage.getItem('arcturusCasting') === 'true',
                 noCastSourceAlert: false,
@@ -1287,6 +1289,12 @@
                 watchSessionStartedAt: 0,
                 inferredWatchedMs: 0,
                 inferredVisibleSince: 0,
+                hardLockStandbyIframe: null,
+                hardLockStandbyTimer: null,
+                hardLockFullscreen: false,
+                hardLockStandbyReady: false,
+                hardLockStandbyForUrl: '',
+                hardLockListenersReady: false,
 
                 async init() {
                     console.log('[Watch] Selected source:', this.selectedSource);
@@ -1306,9 +1314,14 @@
                     
                     // Get source from URL if provided (from continue watching)
                     const sourceParam = urlParams.get('source');
-                    if (sourceParam) {
+                    if (sourceParam && this.availableSources.some(s => s.id === sourceParam)) {
                         this.selectedSource = sourceParam;
                     }
+                    if (!this.availableSources.some(s => s.id === this.selectedSource)) {
+                        this.selectedSource = 'arcturusapi';
+                    }
+                    this.selectedSource = 'arcturusapi';
+                    this.initHardLockStandbyListeners();
 
                     // Get season/episode from URL if provided (from continue watching)
                     const seasonParam = urlParams.get('season');
@@ -1325,7 +1338,7 @@
                         this.fetchTorrentInfo();
 
                         // ── Source init ────────────────────────────────────────
-                        if (this.selectedSource === 'arcturusapi') {
+                        if (this.selectedSource === 'arcturusapi' && this.arcturusEngineEnabled) {
                             // Start silently testing & preloading all sources now,
                             // so by the time the user hits Play everything is ready.
                             const tvParams = this.isShow
@@ -1341,9 +1354,9 @@
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                             </svg>
-                                            <span class="text-white font-medium">Arcturus API — Finding best source…</span>
+                                            <span class="text-white font-medium">Arcturus API — Preparing smart stream…</span>
                                         </div>
-                                        <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
+                                        <p class="text-gray-500 text-sm">Warming failover path</p>
                                     </div>`;
                             }
 
@@ -1360,10 +1373,9 @@
                                 },
                                 onReady: (ranked) => {
                                     this.arcturusReady = true;
-                                    const top      = ranked[0];
-                                    const castCount = ranked.filter(r => r.castCapable).length;
-                                    const verified  = top?.verified ? '✓' : '';
-                                    this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
+                                    this.arcturusStatusText = this.castingModeOn
+                                        ? '1 source locked · smart standby (cast)'
+                                        : '1 source locked · smart standby';
                                     if (this.content) {
                                         const ar = this.content.video_formats?.[0]?.aspect_ratio
                                                 || (this.contentType === 'movie' ? 2.39 : 1.778);
@@ -1375,7 +1387,9 @@
                         } else {
                             // Direct source mode (user manually selected a non-engine source)
                             this.arcturusReady = true;
-                            this.arcturusStatusText = 'Direct source mode';
+                            this.arcturusStatusText = this.selectedSource === 'arcturusapi'
+                                ? '1 source locked · smart standby'
+                                : 'Direct source mode';
                             this.updateVideoUrl();
                         }
                         // ─────────────────────────────────────────────────────
@@ -1412,10 +1426,12 @@
                         const contentAR = this.contentType === 'movie'
                             ? (parseFloat(data.video_formats?.[0]?.aspect_ratio) || 2.39)
                             : 1.778;
-                        ArcturusEngine.setContentRatio(
-                            contentAR,
-                            document.getElementById('player-container')
-                        );
+                        if (this.arcturusEngineEnabled) {
+                            ArcturusEngine.setContentRatio(
+                                contentAR,
+                                document.getElementById('player-container')
+                            );
+                        }
                         
                         const imagesUrl = `${baseUrl}/${this.contentType}/${this.contentId}/images?api_key=${this.apiKey}&language=${language}`;
                         const imagesResponse = await fetch(imagesUrl);
@@ -1541,10 +1557,18 @@
 
                 tryNextSource() {
                     if (this.selectedSource === 'arcturusapi') {
-                        // If Arcturus engine is active, delegate failover to it
-                        const playerContainer = document.getElementById('player-container');
-                        if (playerContainer) {
-                            ArcturusEngine.failover(playerContainer);
+                        // Single-source lock: no multi-source failover.
+                        if (this.arcturusEngineEnabled) {
+                            const playerContainer = document.getElementById('player-container');
+                            if (playerContainer) {
+                                ArcturusEngine.failover(playerContainer);
+                            }
+                        } else {
+                            if (!this.promoteHardLockStandby()) {
+                                const failoverUrl = this.withAutoplay(this.currentVideoUrl, true);
+                                this.setPlaybackMode({ url: failoverUrl, mimeType: '', type: 'embed', engineSourceId: 'arcturusapi' });
+                                this.mountLockedIframe(failoverUrl);
+                            }
                         }
                         return;
                     }
@@ -1577,6 +1601,7 @@
                         this.providerDown = false;
                         this.showDownMessage = false;
                     }
+                    this.syncHardLockStandbyState();
                 },
 
                 setPlaybackMode({ url = '', mimeType = '', type = 'embed', engineSourceId = '' } = {}) {
@@ -1585,6 +1610,172 @@
                     this.currentPlaybackType = type;
                     this.activeEngineSourceId = engineSourceId;
                     this.beginWatchSession(url);
+                    this.syncHardLockStandbyState();
+                },
+
+                isMobileOrIPadDevice() {
+                    const ua = navigator.userAgent || '';
+                    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                    const isMobileUA = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua);
+                    const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+                    const isSmallScreen = Math.min(window.innerWidth || 0, window.innerHeight || 0) <= 1024;
+                    return isIOS || (isMobileUA && hasTouch) || (hasTouch && isSmallScreen);
+                },
+
+                withAutoplay(url, enabled) {
+                    try {
+                        const u = new URL(url);
+                        u.searchParams.set('autoPlay', enabled ? 'true' : 'false');
+                        u.searchParams.set('autoplay', enabled ? '1' : '0');
+                        return u.toString();
+                    } catch {
+                        return url;
+                    }
+                },
+
+                addHardLockPreconnect(url) {
+                    document.querySelectorAll('link[data-hardlock-preconnect="1"]').forEach(el => el.remove());
+                    try {
+                        const origin = new URL(url).origin;
+                        const link = document.createElement('link');
+                        link.rel = 'preconnect';
+                        link.href = origin;
+                        link.setAttribute('data-hardlock-preconnect', '1');
+                        document.head.appendChild(link);
+                    } catch {}
+                },
+
+                mountLockedIframe(url) {
+                    const playerContainer = document.getElementById('player-container');
+                    if (!playerContainer) return;
+
+                    let iframe = playerContainer.querySelector('iframe[data-main-player="1"]');
+                    if (!iframe) iframe = playerContainer.querySelector('iframe');
+                    if (!iframe) {
+                        iframe = document.createElement('iframe');
+                        playerContainer.prepend(iframe);
+                    }
+
+                    iframe.className = 'absolute top-0 left-0 w-full h-full';
+                    iframe.frameBorder = '0';
+                    iframe.scrolling = 'no';
+                    iframe.allowFullscreen = true;
+                    iframe.setAttribute('data-main-player', '1');
+                    iframe.onerror = () => this.checkProviderStatus();
+                    iframe.onload = () => this.handleProviderLoad();
+                    if (iframe.src !== url) iframe.src = url;
+                },
+
+                destroyHardLockStandby() {
+                    if (this.hardLockStandbyTimer) {
+                        clearTimeout(this.hardLockStandbyTimer);
+                        this.hardLockStandbyTimer = null;
+                    }
+                    if (this.hardLockStandbyIframe) {
+                        this.hardLockStandbyIframe.remove();
+                        this.hardLockStandbyIframe = null;
+                    }
+                    this.hardLockStandbyReady = false;
+                    this.hardLockStandbyForUrl = '';
+                },
+
+                armHardLockStandby() {
+                    if (this.hardLockStandbyTimer) {
+                        clearTimeout(this.hardLockStandbyTimer);
+                        this.hardLockStandbyTimer = null;
+                    }
+                    if (this.hardLockStandbyIframe || !this.currentVideoUrl) return;
+
+                    const armedFor = this.currentVideoUrl;
+                    this.hardLockStandbyTimer = setTimeout(() => {
+                        this.hardLockStandbyTimer = null;
+                        if (this.arcturusEngineEnabled || this.selectedSource !== 'arcturusapi') return;
+                        if (!(this.hardLockFullscreen || this.isCasting)) return;
+                        if (this.currentPlaybackType !== 'embed') return;
+                        if (this.currentVideoUrl !== armedFor) return;
+                        if (this.hardLockStandbyIframe) return;
+
+                        const standby = document.createElement('iframe');
+                        standby.src = this.withAutoplay(armedFor, false);
+                        standby.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;border:none;visibility:hidden;';
+                        standby.setAttribute('aria-hidden', 'true');
+                        standby.setAttribute('data-hardlock-standby', '1');
+                        standby.setAttribute('data-hardlock-url', armedFor);
+                        if (!this.isMobileOrIPadDevice()) {
+                            standby.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms');
+                        }
+                        document.body.appendChild(standby);
+                        this.hardLockStandbyIframe = standby;
+                        this.hardLockStandbyReady = true;
+                        this.hardLockStandbyForUrl = armedFor;
+                    }, 30000);
+                },
+
+                promoteHardLockStandby() {
+                    const standby = this.hardLockStandbyIframe;
+                    if (!standby || !this.hardLockStandbyReady) return false;
+
+                    const playerContainer = document.getElementById('player-container');
+                    if (!playerContainer) return false;
+
+                    const failoverUrl = this.withAutoplay(this.currentVideoUrl || this.hardLockStandbyForUrl, true);
+                    const current = playerContainer.querySelector('iframe[data-main-player="1"]') || playerContainer.querySelector('iframe');
+                    if (current) current.remove();
+
+                    standby.style.cssText = '';
+                    standby.className = 'absolute top-0 left-0 w-full h-full';
+                    standby.frameBorder = '0';
+                    standby.scrolling = 'no';
+                    standby.allowFullscreen = true;
+                    standby.removeAttribute('sandbox');
+                    standby.setAttribute('data-main-player', '1');
+                    standby.src = failoverUrl;
+                    standby.onerror = () => this.checkProviderStatus();
+                    standby.onload = () => this.handleProviderLoad();
+                    playerContainer.prepend(standby);
+
+                    this.hardLockStandbyIframe = null;
+                    this.hardLockStandbyReady = false;
+                    this.hardLockStandbyForUrl = '';
+                    this.setPlaybackMode({ url: failoverUrl, mimeType: '', type: 'embed', engineSourceId: 'arcturusapi' });
+                    return true;
+                },
+
+                syncHardLockStandbyState() {
+                    if (this.arcturusEngineEnabled || this.selectedSource !== 'arcturusapi' || this.currentPlaybackType !== 'embed') {
+                        this.destroyHardLockStandby();
+                        return;
+                    }
+                    if (this.hardLockFullscreen || this.isCasting) {
+                        this.armHardLockStandby();
+                    } else {
+                        this.destroyHardLockStandby();
+                    }
+                },
+
+                initHardLockStandbyListeners() {
+                    if (this.hardLockListenersReady) return;
+                    this.hardLockListenersReady = true;
+
+                    const onFullscreenChange = () => {
+                        const fsEl = document.fullscreenElement
+                            || document.webkitFullscreenElement
+                            || document.mozFullScreenElement
+                            || null;
+                        this.hardLockFullscreen = !!fsEl;
+                        this.syncHardLockStandbyState();
+                    };
+
+                    document.addEventListener('fullscreenchange', onFullscreenChange);
+                    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+                    document.addEventListener('mozfullscreenchange', onFullscreenChange);
+                    document.addEventListener('visibilitychange', () => {
+                        if (document.hidden) {
+                            this.destroyHardLockStandby();
+                        } else {
+                            this.syncHardLockStandbyState();
+                        }
+                    });
                 },
 
                 getDirectCastMedia() {
@@ -1701,8 +1892,8 @@
                         ? { id: this.contentId, season: this.selectedSeason, episode: this.selectedEpisode }
                         : { id: this.contentId };
 
-                    // ── Arcturus Engine: route arcturusapi through the smart engine ──
-                    if (this.selectedSource === 'arcturusapi') {
+                    // ── Arcturus Engine (optional) ────────────────────────────────
+                    if (this.selectedSource === 'arcturusapi' && this.arcturusEngineEnabled) {
                         const playerContainer = document.getElementById('player-container');
                         if (!playerContainer) return;
 
@@ -1720,6 +1911,25 @@
                         return;
                     }
                     // ────────────────────────────────────────────────────────────────
+
+                    // Single-source lock path for arcturusapi.
+                    if (this.selectedSource === 'arcturusapi') {
+                        const lockedUrl = this.getSourceUrl(
+                            'arcturusapi',
+                            this.isShow ? 'tv' : 'movie',
+                            params
+                        );
+                        this.destroyHardLockStandby();
+                        this.addHardLockPreconnect(lockedUrl);
+                        this.setPlaybackMode({
+                            url: lockedUrl,
+                            mimeType: '',
+                            type: 'embed',
+                            engineSourceId: 'arcturusapi'
+                        });
+                        this.$nextTick(() => this.mountLockedIframe(lockedUrl));
+                        return;
+                    }
 
                     if (source.isApiResponse) {
                         const apiUrl = this.getSourceUrl(
@@ -1875,6 +2085,7 @@
                 toggleAutoCrop() {
                     this.autoCropOn = !this.autoCropOn;
                     localStorage.setItem('arcturusAutoCrop', this.autoCropOn);
+                    if (!this.arcturusEngineEnabled) return;
                     const playerContainer = document.getElementById('player-container');
                     const ar = this.contentType === 'movie' ? 2.39 : 1.778;
                     ArcturusEngine.setAutoCrop(this.autoCropOn, playerContainer, ar);
@@ -1885,6 +2096,7 @@
                     this.noCastSourceAlert  = false;
                     this.noCastFallbackName = '';
                     localStorage.setItem('arcturusCasting', this.castingModeOn);
+                    if (!this.arcturusEngineEnabled) return;
 
                     const playerContainer = document.getElementById('player-container');
                     if (this.castingModeOn) {
@@ -1903,6 +2115,11 @@
                 async refreshArcturusForEpisode() {
                     // Called when user changes season/episode on a TV show
                     if (this.selectedSource !== 'arcturusapi') return;
+                    if (!this.arcturusEngineEnabled) {
+                        this.arcturusReady = true;
+                        this.updateVideoUrl();
+                        return;
+                    }
                     this.arcturusReady = false;
 
                     // Show loading state while re-ranking
@@ -1915,9 +2132,9 @@
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                     </svg>
-                                    <span class="text-white font-medium">Arcturus API — Finding best source…</span>
+                                    <span class="text-white font-medium">Arcturus API — Preparing smart stream…</span>
                                 </div>
-                                <p class="text-gray-500 text-sm">Testing all sources simultaneously</p>
+                                <p class="text-gray-500 text-sm">Warming failover path</p>
                             </div>`;
                     }
 
@@ -1933,10 +2150,9 @@
                         },
                         onReady: (ranked) => {
                             this.arcturusReady = true;
-                            const top      = ranked[0];
-                            const castCount = ranked.filter(r => r.castCapable).length;
-                            const verified  = top?.verified ? '✓' : '';
-                            this.arcturusStatusText = `${ranked.length} sources ranked${this.castingModeOn ? ` · ${castCount} cast-ready 📡` : ''} — best: ${top?.score ?? '?'}/100 ${verified}`;
+                            this.arcturusStatusText = this.castingModeOn
+                                ? '1 source locked · smart standby (cast)'
+                                : '1 source locked · smart standby';
                             ArcturusEngine.setContentRatio(this.contentType === 'movie' ? 2.39 : 1.778);
                             this.updateVideoUrl();
                         }
@@ -2185,7 +2401,7 @@
                         return;
                     }
 
-                    if (this.selectedSource === 'arcturusapi') {
+                    if (this.selectedSource === 'arcturusapi' && this.arcturusEngineEnabled) {
                         this.toggleCastingMode();
                     }
 
@@ -2237,6 +2453,7 @@
                             console.log('Media loaded on Chromecast');
                             this.isCasting = true;
                             ArcturusEngine.notifyCasting?.(true);
+                            this.syncHardLockStandbyState();
                         },
                         (error) => {
                             console.error('Error loading media:', error);
@@ -2291,6 +2508,7 @@
                                             this.castSession = castContext.getCurrentSession();
                                             console.log('Cast session started');
                                             ArcturusEngine.notifyCasting?.(true);
+                                            this.syncHardLockStandbyState();
                                             break;
                                         case cast.framework.SessionState.SESSION_ENDED:
                                         case cast.framework.SessionState.SESSION_ENDING:
@@ -2298,6 +2516,7 @@
                                             this.castSession = null;
                                             console.log('Cast session ended');
                                             ArcturusEngine.notifyCasting?.(false);
+                                            this.syncHardLockStandbyState();
                                             break;
                                     }
                                 }
@@ -2448,7 +2667,11 @@
     </script>
     <script>
         // Clean up Arcturus preload iframes when user navigates away
-        window.addEventListener('beforeunload', () => ArcturusEngine.destroy());
+        window.addEventListener('beforeunload', () => {
+            ArcturusEngine.destroy();
+            document.querySelectorAll('[data-hardlock-standby="1"]').forEach(el => el.remove());
+            document.querySelectorAll('link[data-hardlock-preconnect="1"]').forEach(el => el.remove());
+        });
     </script>
 </body>
 </html>
