@@ -28,15 +28,6 @@
     return localStorage.getItem('adBlockerEnabled') !== 'false'
   }
 
-  function isMobileOrIPadDevice() {
-    const ua = navigator.userAgent || ''
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    const isMobileUA = /Android|webOS|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua)
-    const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window
-    const isSmallScreen = Math.min(window.innerWidth || 0, window.innerHeight || 0) <= 1024
-    return isIOS || (isMobileUA && hasTouch) || (hasTouch && isSmallScreen)
-  }
-
   // ── Whitelisted domains (never blocked) ──────────────────────
   const whitelistedDomains = [
     window.location.hostname,
@@ -439,14 +430,6 @@
   function applySandboxToIframe(iframe) {
     if (!isAdBlockerEnabled()) return
     if (!iframe || iframe.hasAttribute('data-arcturus-sandboxed')) return
-
-    // Some providers hard-fail on iPad/mobile if any sandbox attribute exists.
-    // Keep desktop hardening, but bypass sandbox on touch/mobile devices.
-    if (isMobileOrIPadDevice()) {
-      iframe.setAttribute('data-arcturus-sandboxed', 'mobile-bypass')
-      console.log('[Arcturus AdBlock] Mobile/iPad sandbox bypass enabled')
-      return
-    }
 
     // Don't sandbox trailer iframes (YouTube embeds need allow-popups for sharing)
     const src = iframe.src || iframe.getAttribute('src') || ''
