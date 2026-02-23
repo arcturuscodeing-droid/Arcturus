@@ -1325,7 +1325,7 @@
                         this.fetchTorrentInfo();
 
                         // ── Source init ────────────────────────────────────────
-                        if (this.selectedSource === 'arcturusapi') {
+                        if (this.selectedSource === 'arcturusapi' && !this.castingModeOn) {
                             // Start silently testing & preloading all sources now,
                             // so by the time the user hits Play everything is ready.
                             const tvParams = this.isShow
@@ -1373,9 +1373,11 @@
                                 }
                             });
                         } else {
-                            // Direct source mode (user manually selected a non-engine source)
+                            // Direct source mode (cast mode or non-engine source)
                             this.arcturusReady = true;
-                            this.arcturusStatusText = 'Direct source mode';
+                            this.arcturusStatusText = this.selectedSource === 'arcturusapi' && this.castingModeOn
+                                ? 'Cast mode: direct source'
+                                : 'Direct source mode';
                             this.updateVideoUrl();
                         }
                         // ─────────────────────────────────────────────────────
@@ -1541,10 +1543,48 @@
 
                 tryNextSource() {
                     if (this.selectedSource === 'arcturusapi') {
-                        // Engine handles failover for both regular and casting mode
+                        if (!this.castingModeOn) {
+                            // Regular mode: use Arcturus auto-search failover.
+                            const playerContainer = document.getElementById('player-container');
+                            if (playerContainer) {
+                                ArcturusEngine.failover(playerContainer);
+                            }
+                            return;
+                        }
+
+                        // Cast mode: keep cast source fixed, but force a fresh reload
+                        // so the auto runner still recovers from transient failures.
+                        const source = this.availableSources.find(s => s.id === this.selectedSource);
+                        if (!source) return;
+                        const params = this.isShow
+                            ? { id: this.contentId, season: this.selectedSeason, episode: this.selectedEpisode }
+                            : { id: this.contentId };
+                        let retryUrl = this.getSourceUrl(
+                            this.selectedSource,
+                            this.isShow ? 'tv' : 'movie',
+                            params
+                        );
+                        retryUrl += (retryUrl.includes('?') ? '&' : '?') + `_arc_retry=${Date.now()}`;
+
+                        this.setPlaybackMode({
+                            url: retryUrl,
+                            mimeType: '',
+                            type: 'embed',
+                            engineSourceId: ''
+                        });
+
                         const playerContainer = document.getElementById('player-container');
                         if (playerContainer) {
-                            ArcturusEngine.failover(playerContainer);
+                            playerContainer.innerHTML = '';
+                            const iframe = document.createElement('iframe');
+                            iframe.src = retryUrl;
+                            iframe.className = 'absolute top-0 left-0 w-full h-full';
+                            iframe.frameBorder = '0';
+                            iframe.scrolling = 'no';
+                            iframe.allowFullscreen = true;
+                            iframe.addEventListener('error', () => this.checkProviderStatus());
+                            iframe.addEventListener('load', () => this.handleProviderLoad());
+                            playerContainer.appendChild(iframe);
                         }
                         return;
                     }
@@ -1702,7 +1742,7 @@
                         : { id: this.contentId };
 
                     // ── Arcturus Engine (regular mode only) ──────────────────────
-                    if (this.selectedSource === 'arcturusapi') {
+                    if (this.selectedSource === 'arcturusapi' && !this.castingModeOn) {
                         const playerContainer = document.getElementById('player-container');
                         if (!playerContainer) return;
 
@@ -1890,13 +1930,28 @@
                         return;
                     }
 
-                    // Both casting and regular mode use the engine — just re-init with new flag
-                    this.refreshArcturusForEpisode();
+                    if (this.castingModeOn) {
+                        // Cast mode uses fixed direct source.
+                        this.arcturusReady = true;
+                        this.arcturusStatusText = 'Cast mode: direct source';
+                        this.updateVideoUrl();
+                    } else {
+                        // Regular mode re-enables Arcturus auto-search.
+                        ArcturusEngine.setCastingMode(false, null);
+                        this.refreshArcturusForEpisode();
+                    }
                 },
 
                 async refreshArcturusForEpisode() {
                     // Called when user changes season/episode on a TV show
                     if (this.selectedSource !== 'arcturusapi') return;
+
+                    if (this.castingModeOn) {
+                        this.arcturusReady = true;
+                        this.arcturusStatusText = 'Cast mode: direct source';
+                        this.updateVideoUrl();
+                        return;
+                    }
 
                     this.arcturusReady = false;
 
@@ -2180,7 +2235,7 @@
                         return;
                     }
 
-                    if (this.selectedSource === 'arcturusapi') {
+                    if (this.selectedSource === 'arcturusapi' && !this.castingModeOn) {
                         this.toggleCastingMode();
                     }
 
@@ -2231,7 +2286,6 @@
                         () => {
                             console.log('Media loaded on Chromecast');
                             this.isCasting = true;
-                            ArcturusEngine.notifyCasting(true);
                         },
                         (error) => {
                             console.error('Error loading media:', error);
@@ -2285,14 +2339,12 @@
                                             this.isCasting = true;
                                             this.castSession = castContext.getCurrentSession();
                                             console.log('Cast session started');
-                                            ArcturusEngine.notifyCasting(true);
                                             break;
                                         case cast.framework.SessionState.SESSION_ENDED:
                                         case cast.framework.SessionState.SESSION_ENDING:
                                             this.isCasting = false;
                                             this.castSession = null;
                                             console.log('Cast session ended');
-                                            ArcturusEngine.notifyCasting(false);
                                             break;
                                     }
                                 }
