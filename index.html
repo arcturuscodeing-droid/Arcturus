@@ -29,7 +29,8 @@
     <meta property="twitter:description"
         content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
     <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="shortcut icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
@@ -170,6 +171,27 @@
                     rgba(0, 0, 0, 0.7) 50%,
                     rgba(0, 0, 0, 0.3) 100%);
         }
+
+        /* Rating badge — hover fade on desktop, always visible on mobile */
+        .rating-badge {
+            position: absolute;
+            top: 7px; left: 7px;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 5px;
+            padding: 2px 6px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #ffd700;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 5;
+            white-space: nowrap;
+        }
+        .card-hover:hover .rating-badge { opacity: 1; }
+        @media (max-width: 768px) { .rating-badge { opacity: 1 !important; } }
 
         .card-hover:hover img {
             filter: blur(2px) brightness(0.9);
@@ -671,11 +693,56 @@
         .scrollbar-purple::-webkit-scrollbar-thumb:hover {
             background: #a855f7;
         }
+
+        /* ── Mobile fixes ── */
+        @media (max-width: 768px) {
+            /* Prevent horizontal overflow */
+            body { overflow-x: hidden; }
+
+            /* Hero: reduce height on small screens */
+            #hero-slider { height: 70vh !important; min-height: 380px !important; }
+
+            /* Hero content: smaller text, more padding room */
+            .hero-content { padding-left: 1.25rem !important; padding-right: 1.25rem !important; padding-bottom: 5rem !important; }
+            .hero-content h1 { font-size: 1.75rem !important; line-height: 1.15 !important; }
+            .hero-content p { font-size: 0.75rem !important; }
+
+            /* Sound / close buttons: bring inside viewport */
+            .hero-sound-btn { bottom: 60px !important; right: 12px !important; }
+            .hero-close-btn { top: 70px !important; right: 10px !important; }
+
+            /* Card rows: smaller cards so they don't overflow */
+            .flex-none.w-36 { width: 7.5rem !important; }
+
+            /* Search bar full-width on mobile */
+            .search-container { width: 100% !important; }
+
+            /* Hover card: disable on touch (it causes layout issues) */
+            .hcard-popup { display: none !important; }
+
+            /* Container padding */
+            .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+
+            /* Scroll arrow buttons: hide on mobile (swipe works fine) */
+            .scroll-btn { display: none !important; }
+        }
     </style>
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen" x-data="app()" @keydown.meta.k.prevent="$refs.searchInput.focus()"
     @keydown.ctrl.k.prevent="$refs.searchInput.focus()">
+
+    <!-- ── Section 3.1: Block pop-tab ads via window.open() override ── -->
+    <script>
+        (function() {
+            const _originalOpen = window.open.bind(window);
+            window.open = function(url, target, features) {
+                console.warn('[Arcturus AdBlock] Blocked window.open():', url);
+                return null;
+            };
+            window._originalOpen = _originalOpen; // preserve original for legitimate use
+        })();
+    </script>
 
     <div x-show="localStorage.getItem('showParticles') !== 'false'" id="particles-js"
         class="fixed inset-0 pointer-events-none z-0"></div>
@@ -710,7 +777,6 @@
                         <button @click="currentTab = currentTab === 'movies' ? 'shows' : 'movies'" class="nav-link">
                             <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
                         </button>
-                        <a href="livesports.html" class="nav-link">Live Sports</a>
                         <button @click="showWatchLater = true" class="nav-link flex items-center space-x-2">
                             <span>Watch Later</span>
                             <span x-show="watchLaterCount > 0"
@@ -765,8 +831,6 @@
                         class="text-left px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
                         <span x-text="currentTab === 'movies' ? 'Switch to TV Shows' : 'Switch to Movies'"></span>
                     </button>
-                    <a href="livesports.html" class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Live
-                        Sports</a>
                     <button @click="showWatchLater = true; mobileMenu = false"
                         class="flex items-center justify-between px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
                         <span>Watch Later</span>
@@ -785,12 +849,10 @@
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </a>
-                    <a href="https://github.com/ambr0sial/Arcturus" target="_blank"
+                    <a href="https://github.com/Arcturusstream/arcturus" target="_blank"
                         class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">GitHub</a>
-                    <a href="https://ko-fi.com/ambrosial" target="_blank"
+                    <a href="https://ko-fi.com/arcturusstream" target="_blank"
                         class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Ko-Fi</a>
-                    <a href="https://discord.gg/s9kUZw7CqP" target="_blank"
-                        class="px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">Discord</a>
                 </div>
             </div>
         </div>
@@ -920,25 +982,6 @@
 
     <!-- MAIN CONTENT (hidden when searching) -->
     <div x-show="!searchQuery || searchQuery.trim().length === 0">
-    <!-- update message -->
-    <div x-data="{ show: true }" x-show="show && localStorage.getItem('showUpdateNotice') !== 'false'"
-        class="fixed top-[3.5rem] md:top-16 left-0 right-0 z-40 animate-slide-down"
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="transform -translate-y-full"
-        x-transition:enter-end="transform translate-y-0" x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="transform translate-y-0" x-transition:leave-end="transform -translate-y-full">
-        <div class="bg-gray-900 border-b border-purple-500/20">
-            <div class="container mx-auto px-6 py-2 flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <!-- <span class="text-purple-400">🎉</span> -->
-                    <p class="text-sm">
-                        <span class="font-semibold text-purple-400">Update (16/07/25)</span>
-                        <span class="text-gray-300 text-xs sm:text-sm">Updated and Added more sources!🎉</span>
-                    </p>
-                </div>
-                <button @click="show = false" class="text-gray-400 hover:text-white transition-colors">×</button>
-            </div>
-        </div>
-    </div>
 
     <!-- ══════════════════════════════════════════════════ -->
     <!-- HERO SLIDER                                         -->
@@ -1208,9 +1251,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1252,9 +1295,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1281,9 +1324,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1310,9 +1353,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1339,9 +1382,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1368,9 +1411,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1397,9 +1440,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1426,9 +1469,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1455,9 +1498,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1484,9 +1527,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1513,9 +1556,9 @@
                                     <img :src="'https://image.tmdb.org/t/p/w500' + item.poster_path"
                                         :alt="item.title || item.name" class="w-full h-full object-cover"
                                         @error="event => { event.target.src='/logo.png'; event.target.classList.remove('object-cover'); event.target.classList.add('object-contain'); }" />
+                                    <div class="rating-badge" x-text="item.vote_average ? '⭐ ' + item.vote_average.toFixed(1) : ''"></div>
                                     <div class="card-overlay absolute inset-0 flex flex-col justify-end p-3">
                                         <h4 class="text-sm font-semibold truncate" x-text="item.title || item.name"></h4>
-                                        <p class="text-gray-400 text-xs mt-1" x-text="'⭐ ' + (item.vote_average || 'N/A') + '/10'"></p>
                                     </div>
                                 </a>
                                 <button @click.stop="toggleWatchLater(item)"
@@ -1894,34 +1937,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const discordPopupSeen = localStorage.getItem('discordPopupSeen');
-
-            if (!discordPopupSeen) {
-                const popup = document.createElement('div');
-                popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75';
-                popup.innerHTML = `
-                    <div class="bg-gray-800 rounded-lg p-6 text-center space-y-4 max-w-sm">
-                        <h2 class="text-xl font-bold text-purple-400">Arcturus has a Discord Server!</h2>
-                        <p class="text-gray-300">Join the community for updates and discussions <3</p>
-                        <a href="https://discord.gg/s9kUZw7CqP" target="_blank" 
-                            class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-white inline-block">
-                            Join Now
-                        </a>
-                        <button id="closePopup" 
-                            class="text-gray-500 hover:text-gray-300 focus:outline-none">
-                            Dismiss
-                        </button>
-                    </div>
-                `;
-                document.body.appendChild(popup);
-
-                document.getElementById('closePopup').addEventListener('click', function () {
-                    popup.style.display = 'none';
-                    localStorage.setItem('discordPopupSeen', 'true');
-                });
-            }
-        });
+        // Discord popup removed
 
         document.addEventListener('alpine:init', () => {
             Alpine.store('contextMenu', {

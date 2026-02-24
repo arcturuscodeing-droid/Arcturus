@@ -29,7 +29,8 @@
     <meta property="twitter:title" content="Arcturus - Watch Movies & TV Shows">
     <meta property="twitter:description" content="Click, watch, enjoy. Arcturus breaks down the paywall, ensuring that quality content is accessible to everyone.">
     <meta property="twitter:image" content="https://raw.githubusercontent.com/ambr0sial/Arcturus/main/logo.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="shortcut icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.3/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -224,6 +225,91 @@
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen" x-data="app()">
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- ARCTURUS AD BLOCKER — SECTION 3                    -->
+    <!-- 3.1 Override window.open() — blocks pop-tab ads    -->
+    <!-- 3.2 Block target=_blank links from iframes         -->
+    <!-- 3.3 Prevent click hijacking / redirects            -->
+    <!-- 3.4 Sandbox attr added directly on iframes below   -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <script>
+        /* 3.1 — window.open() override (must run before any iframe loads) */
+        (function() {
+            const _orig = window.open.bind(window);
+            window.open = function(url, target, features) {
+                console.warn('[Arcturus AdBlock] Blocked window.open():', url);
+                return null;
+            };
+            window._originalOpen = _orig;
+        })();
+
+        /* 3.2 — Block target="_blank" links originating from iframes */
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a');
+            if (link && link.target === '_blank') {
+                // Only block if the click came from inside an iframe context
+                // (document-level listener catches bubbled synthetic clicks)
+                if (e.isTrusted === false) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    console.warn('[Arcturus AdBlock] Blocked _blank link:', link.href);
+                }
+            }
+        }, true);
+
+        /* 3.3 — Prevent click hijacking / top-level navigation redirects */
+        (function() {
+            // Block any attempt to navigate the top-level window via location changes
+            // triggered by untrusted iframe events
+            let _lastUserClick = 0;
+            document.addEventListener('mousedown', function() { _lastUserClick = Date.now(); }, true);
+            document.addEventListener('touchstart', function() { _lastUserClick = Date.now(); }, true);
+
+            // Override history/location methods used by sneaky ad scripts
+            const _pushState = history.pushState.bind(history);
+            const _replaceState = history.replaceState.bind(history);
+
+            // MutationObserver — catch dynamically injected redirect scripts
+            const observer = new MutationObserver(function(mutations) {
+                for (const mutation of mutations) {
+                    for (const node of mutation.addedNodes) {
+                        if (node.tagName === 'SCRIPT') {
+                            const src = node.src || '';
+                            // Remove scripts injected from ad networks
+                            if (src && !src.includes(location.hostname) &&
+                                !src.includes('themoviedb') &&
+                                !src.includes('googleapis') &&
+                                !src.includes('gstatic') &&
+                                !src.includes('firebase') &&
+                                !src.includes('jsdelivr') &&
+                                !src.includes('cloudflare') &&
+                                !src.includes('alpinejs') &&
+                                !src.includes('tailwind') &&
+                                !src.includes('particles') &&
+                                !src.includes('googletagmanager') &&
+                                !src.includes('hls.js')) {
+                                node.remove();
+                                console.warn('[Arcturus AdBlock] Removed injected script:', src);
+                            }
+                        }
+                    }
+                }
+            });
+            observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+
+            // Intercept any top-navigation attempt not triggered by a real user click
+            window.addEventListener('beforeunload', function(e) {
+                const timeSinceClick = Date.now() - _lastUserClick;
+                if (timeSinceClick > 1000) {
+                    // Navigation happened more than 1s after any user interaction — likely hijack
+                    e.preventDefault();
+                    e.returnValue = '';
+                    console.warn('[Arcturus AdBlock] Blocked suspicious navigation (click hijack)');
+                }
+            });
+        })();
+    </script>
     <div x-show="localStorage.getItem('showParticles') !== 'false'" id="particles-js" class="fixed inset-0 pointer-events-none z-0"></div>
 
     <!-- navigation -->
@@ -232,7 +318,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-8">
                     <a href="/" class="flex items-center space-x-3">
-                        <img src="favicon.ico" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
+                        <img src="logo.png" alt="Arcturus Logo" class="h-8 w-8 md:h-10 md:w-10">
                         <span class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-violet-800">Arcturus</span>
                     </a>
 
@@ -378,6 +464,7 @@
                                     scrolling="no" 
                                     @error="checkProviderStatus()"
                                     @load="handleProviderLoad()"
+                                    sandbox="allow-scripts allow-same-origin allow-forms allow-presentation allow-popups-to-escape-sandbox"
                                     allowfullscreen>
                             </iframe>
                             <button @click="toggleWatchLater(content)" 
@@ -981,7 +1068,7 @@
                                         :alt="item.title || item.name"
                                         class="w-full h-full object-cover transition-all flex items-center justify-center"
                                         @error="event => {
-                                            event.target.src = '/favicon.ico';
+                                            event.target.src = 'logo.png';
                                             event.target.classList.remove('object-cover');
                                             event.target.classList.add('object-contain');
                                         }" />
@@ -1663,6 +1750,7 @@
                     iframe.frameBorder = '0';
                     iframe.scrolling = 'no';
                     iframe.allowFullscreen = true;
+                    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation allow-popups-to-escape-sandbox');
                     iframe.setAttribute('data-main-player', '1');
                     iframe.onerror = () => this.checkProviderStatus();
                     iframe.onload = () => this.handleProviderLoad();
