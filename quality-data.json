@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-02-26T14:40:10.690Z",
+    "generated": "2026-02-26T19:57:52.001Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
@@ -9,25 +9,25 @@
     "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 3413
+    "avg_response_ms": 2344
   },
   "pstream": {
     "score": 87,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 203
+    "avg_response_ms": 254
   },
   "multiembed": {
     "score": 68,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 3701
+    "avg_response_ms": 2575
   },
   "moviesapi": {
     "score": 68,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 3578
+    "avg_response_ms": 2604
   },
   "embedsu": {
     "score": 80,
@@ -45,73 +45,73 @@
     "score": 78,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 568
+    "avg_response_ms": 940
   },
   "vidsrcXyz": {
     "score": 72,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 3628
+    "avg_response_ms": 2835
   },
   "vidsrcrip": {
-    "score": 70,
-    "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
-  },
-  "vidsrcsu": {
-    "score": 73,
+    "score": 71,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 792
+    "avg_response_ms": 1602
+  },
+  "vidsrcsu": {
+    "score": 71,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 1496
   },
   "vidsrcvip": {
     "score": 70,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 3555
+    "avg_response_ms": 2463
   },
   "2embed": {
-    "score": 58,
+    "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 715
+    "avg_response_ms": 1053
   },
   "123embed": {
     "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1090
+    "avg_response_ms": 1567
   },
   "111movies": {
     "score": 52,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 3841
+    "avg_response_ms": 2718
   },
   "smashystream": {
     "score": 59,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1205
+    "avg_response_ms": 1370
   },
   "autoembed": {
     "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 3683
+    "avg_response_ms": 2593
   },
   "videasy": {
     "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 1334
+    "avg_response_ms": 1401
   },
   "vidfast": {
     "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 1404
+    "avg_response_ms": 1633
   },
   "vidify": {
     "score": 50,
@@ -122,44 +122,44 @@
   "flicky": {
     "score": 62,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2976
   },
   "rive": {
     "score": 62,
     "label": "720p",
-    "verified": true,
-    "avg_response_ms": 2148
+    "verified": false,
+    "avg_response_ms": 0
   },
   "vidora": {
-    "score": 61,
+    "score": 60,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1930
+    "avg_response_ms": 2330
   },
   "nebula": {
     "score": 62,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1921
+    "avg_response_ms": 1863
   },
   "vidzee": {
     "score": 85,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 2653
+    "avg_response_ms": 2599
   },
   "spenflix": {
-    "score": 50,
+    "score": 51,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 2424
+    "avg_response_ms": 1852
   },
   "vidsrccx": {
     "score": 48,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 3218
+    "avg_response_ms": 2220
   },
   "uembed": {
     "score": 45,
