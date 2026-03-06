@@ -1,15 +1,15 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-03-06T05:01:04.669Z",
+    "generated": "2026-03-06T07:53:49.037Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
   "mapple": {
     "score": 65,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2430
   },
   "pstream": {
     "score": 82,
@@ -20,14 +20,14 @@
   "multiembed": {
     "score": 68,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2772
   },
   "moviesapi": {
     "score": 68,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2563
   },
   "embedsu": {
     "score": 80,
@@ -42,46 +42,46 @@
     "avg_response_ms": 0
   },
   "vidlink": {
-    "score": 80,
+    "score": 78,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 489
+    "avg_response_ms": 685
   },
   "vidsrcXyz": {
     "score": 72,
     "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2699
   },
   "vidsrcrip": {
-    "score": 70,
-    "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
-  },
-  "vidsrcsu": {
-    "score": 70,
+    "score": 71,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 4728
+    "avg_response_ms": 1308
+  },
+  "vidsrcsu": {
+    "score": 71,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 1074
   },
   "vidsrcvip": {
     "score": 70,
     "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2504
   },
   "2embed": {
-    "score": 55,
+    "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 4550
+    "avg_response_ms": 1030
   },
   "123embed": {
-    "score": 55,
+    "score": 56,
     "label": "480p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 1452
   },
   "111movies": {
     "score": 52,
@@ -90,46 +90,46 @@
     "avg_response_ms": 0
   },
   "smashystream": {
-    "score": 58,
+    "score": 59,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 4855
+    "avg_response_ms": 1525
   },
   "autoembed": {
     "score": 65,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2545
   },
   "videasy": {
-    "score": 95,
+    "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 4951
+    "avg_response_ms": 1189
   },
   "vidfast": {
-    "score": 95,
+    "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 4975
+    "avg_response_ms": 1459
   },
   "vidify": {
-    "score": 50,
+    "score": 51,
     "label": "480p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 1871
   },
   "flicky": {
     "score": 62,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2665
   },
   "rive": {
     "score": 62,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2007
   },
   "vidora": {
     "score": 60,
@@ -138,28 +138,28 @@
     "avg_response_ms": 0
   },
   "nebula": {
-    "score": 60,
+    "score": 61,
     "label": "720p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2167
   },
   "vidzee": {
     "score": 85,
     "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2355
   },
   "spenflix": {
     "score": 50,
     "label": "480p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2207
   },
   "vidsrccx": {
     "score": 48,
     "label": "480p",
-    "verified": false,
-    "avg_response_ms": 0
+    "verified": true,
+    "avg_response_ms": 2350
   },
   "uembed": {
     "score": 45,
