@@ -1,15 +1,15 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-03-15T18:33:28.487Z",
+    "generated": "2026-03-16T02:03:02.987Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
   "mapple": {
-    "score": 66,
+    "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1689
+    "avg_response_ms": 2032
   },
   "pstream": {
     "score": 82,
@@ -21,13 +21,13 @@
     "score": 68,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 2090
+    "avg_response_ms": 2204
   },
   "moviesapi": {
-    "score": 69,
+    "score": 68,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1839
+    "avg_response_ms": 2912
   },
   "embedsu": {
     "score": 80,
@@ -42,94 +42,94 @@
     "avg_response_ms": 0
   },
   "vidlink": {
-    "score": 80,
+    "score": 78,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 362
+    "avg_response_ms": 956
   },
   "vidsrcXyz": {
-    "score": 73,
+    "score": 72,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 1812
+    "avg_response_ms": 2271
   },
   "vidsrcrip": {
-    "score": 70,
-    "label": "1080p",
-    "verified": false,
-    "avg_response_ms": 0
-  },
-  "vidsrcsu": {
-    "score": 73,
-    "label": "1080p",
-    "verified": true,
-    "avg_response_ms": 601
-  },
-  "vidsrcvip": {
     "score": 71,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 1937
+    "avg_response_ms": 1949
+  },
+  "vidsrcsu": {
+    "score": 71,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 1144
+  },
+  "vidsrcvip": {
+    "score": 70,
+    "label": "1080p",
+    "verified": true,
+    "avg_response_ms": 2079
   },
   "2embed": {
-    "score": 60,
-    "label": "480p",
-    "verified": true,
-    "avg_response_ms": 376
-  },
-  "123embed": {
     "score": 58,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 778
+    "avg_response_ms": 830
+  },
+  "123embed": {
+    "score": 56,
+    "label": "480p",
+    "verified": true,
+    "avg_response_ms": 1278
   },
   "111movies": {
     "score": 52,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 2143
+    "avg_response_ms": 2326
   },
   "smashystream": {
-    "score": 61,
+    "score": 59,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 726
+    "avg_response_ms": 1394
   },
   "autoembed": {
-    "score": 66,
+    "score": 65,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1999
+    "avg_response_ms": 2180
   },
   "videasy": {
-    "score": 98,
+    "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 837
+    "avg_response_ms": 1455
   },
   "vidfast": {
-    "score": 98,
+    "score": 96,
     "label": "4K",
     "verified": true,
-    "avg_response_ms": 899
+    "avg_response_ms": 1735
   },
   "vidify": {
     "score": 51,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1329
+    "avg_response_ms": 1902
   },
   "flicky": {
     "score": 62,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 2168
+    "avg_response_ms": 2437
   },
   "rive": {
     "score": 63,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1161
+    "avg_response_ms": 1694
   },
   "vidora": {
     "score": 60,
@@ -141,25 +141,25 @@
     "score": 62,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 1382
+    "avg_response_ms": 1772
   },
   "vidzee": {
-    "score": 86,
+    "score": 85,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 1573
+    "avg_response_ms": 2244
   },
   "spenflix": {
     "score": 51,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1415
+    "avg_response_ms": 1817
   },
   "vidsrccx": {
     "score": 49,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1542
+    "avg_response_ms": 1909
   },
   "uembed": {
     "score": 45,
