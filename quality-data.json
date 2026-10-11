@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-10-11T03:39:24.863Z",
+    "generated": "2026-10-11T12:00:28.612Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
@@ -42,10 +42,10 @@
     "avg_response_ms": 0
   },
   "vidlink": {
-    "score": 78,
+    "score": 75,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 815
+    "avg_response_ms": 4082
   },
   "vidsrcXyz": {
     "score": 72,
@@ -60,10 +60,10 @@
     "avg_response_ms": 0
   },
   "vidsrcsu": {
-    "score": 73,
+    "score": 70,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 989
+    "avg_response_ms": 2808
   },
   "vidsrcvip": {
     "score": 70,
@@ -72,16 +72,16 @@
     "avg_response_ms": 0
   },
   "2embed": {
-    "score": 56,
+    "score": 55,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1565
+    "avg_response_ms": 3441
   },
   "123embed": {
-    "score": 56,
+    "score": 55,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1593
+    "avg_response_ms": 3526
   },
   "111movies": {
     "score": 52,
