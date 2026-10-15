@@ -1,7 +1,7 @@
 {
   "_meta": {
     "description": "Arcturus API — Verified Source Quality Registry",
-    "generated": "2026-10-15T02:56:46.190Z",
+    "generated": "2026-10-15T10:46:13.219Z",
     "generator": "GitHub Actions / quality-scanner.yml",
     "note": "Scores updated automatically every 6 hours. Do not edit manually."
   },
@@ -45,7 +45,7 @@
     "score": 78,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 591
+    "avg_response_ms": 840
   },
   "vidsrcXyz": {
     "score": 72,
@@ -75,13 +75,13 @@
     "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1829
+    "avg_response_ms": 1790
   },
   "123embed": {
     "score": 56,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 1930
+    "avg_response_ms": 1822
   },
   "111movies": {
     "score": 52,
@@ -141,19 +141,19 @@
     "score": 60,
     "label": "720p",
     "verified": true,
-    "avg_response_ms": 4540
+    "avg_response_ms": 3083
   },
   "vidzee": {
     "score": 85,
     "label": "1080p",
     "verified": true,
-    "avg_response_ms": 4749
+    "avg_response_ms": 3477
   },
   "spenflix": {
     "score": 50,
     "label": "480p",
     "verified": true,
-    "avg_response_ms": 4605
+    "avg_response_ms": 3569
   },
   "vidsrccx": {
     "score": 48,
